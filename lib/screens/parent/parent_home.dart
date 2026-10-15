@@ -164,7 +164,7 @@ class ParentHome extends StatelessWidget {
                     child: Row(children: [
                       const IconBadge(Icons.verified_rounded, AppColors.leaf),
                       const SizedBox(width: 12),
-                      Expanded(child: Text(context.tr('لا توجد تنبيهات. كل شيء على ما يرام ✅', 'No alerts. All good ✅'))),
+                      Expanded(child: Text(context.tr('لا توجد تنبيهات. كل شيء على ما يرام','No alerts. All good'))),
                     ]),
                   ),
                 for (final a in alerts)

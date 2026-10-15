@@ -244,7 +244,7 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
                           fontWeight: FontWeight.w800, fontSize: 16)),
                   if (sub.feedback.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    Text('💬 ${sub.feedback}'),
+                    Text(sub.feedback),
                   ],
                 ],
               ],
@@ -295,11 +295,11 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
             }
             final body = [
               if (t.isNotEmpty) t,
-              if (_attached) context.tr('📎 صورة مرفقة', '📎 Photo attached'),
+              if (_attached) context.tr('صورة مرفقة','Photo attached'),
             ].join('\n');
             s.submitHomework(widget.hw.id, widget.studentId, body);
             Navigator.pop(context);
-            toast(context, context.tr('تم تسليم الواجب ✅', 'Homework submitted ✅'));
+            toast(context, context.tr('تم تسليم الواجب','Homework submitted'));
           },
           child: Text(resubmit
               ? context.tr('إعادة التسليم', 'Resubmit')

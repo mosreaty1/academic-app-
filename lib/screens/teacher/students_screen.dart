@@ -265,7 +265,7 @@ class _CredentialsDialog extends StatelessWidget {
         'Dr. Rashia Academy\nStudent: ${student.name.en}\nStudent ID: ${student.code}\nPassword: $password');
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
-      title: Text(context.tr('تم إنشاء الحساب ✅', 'Account created ✅'),
+      title: Text(context.tr('تم إنشاء الحساب','Account created'),
           style: const TextStyle(fontWeight: FontWeight.w800)),
       content: Column(
         mainAxisSize: MainAxisSize.min,

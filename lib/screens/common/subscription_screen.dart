@@ -40,7 +40,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     setState(() => _busy = false);
     if (r == 'ok') {
       _code.clear();
-      toast(context, context.tr('تم تفعيل الاشتراك بنجاح 🎉', 'Subscription activated 🎉'));
+      toast(context, context.tr('تم تفعيل الاشتراك بنجاح','Subscription activated'));
     } else {
       toast(
           context,
@@ -315,7 +315,7 @@ class _CheckoutSheetState extends State<_CheckoutSheet> {
                   s.payForPlan(widget.studentId, p, _pay);
                   if (!context.mounted) return;
                   Navigator.pop(context);
-                  toast(context, context.tr('تم الدفع وتفعيل الاشتراك ✅', 'Payment received. Subscription active ✅'));
+                  toast(context, context.tr('تم الدفع وتفعيل الاشتراك','Payment received. Subscription active'));
                 },
           child: _busy
               ? const SizedBox(

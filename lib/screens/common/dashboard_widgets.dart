@@ -129,7 +129,7 @@ class TodayClassesCard extends StatelessWidget {
           if (slots.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(context.tr('لا توجد حصص اليوم 🎉', 'No classes today 🎉'),
+              child: Text(context.tr('لا توجد حصص اليوم','No classes today'),
                   style: TextStyle(color: context.muted)),
             ),
           for (final sl in slots)

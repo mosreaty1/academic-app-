@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: AppColors.primary, size: 34),
                 ),
                 const SizedBox(height: 18),
-                Text(context.tr('أهلاً بك 👋', 'Welcome 👋'),
+                Text(context.tr('أهلاً بك','Welcome'),
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 30,
