@@ -56,11 +56,3 @@ lib/
 All data lives **in memory** (`AppState`, seeded by `Seed`). To go to production, swap the mutating
 methods in `AppState` for API / Firebase calls (auth, Firestore, storage for materials, FCM for
 push notifications, a payment gateway such as Fawry/Paymob for the store) – the UI only talks to `AppState`.
-
-## Automatic web demo + APK (GitHub Actions)
-
-`.github/workflows/deploy.yml` runs on every push: analyze + tests, then publishes the web demo to
-**GitHub Pages** and builds Android APKs.
-
-One-time setup: repo **Settings -> Pages -> Build and deployment -> Source: GitHub Actions**.
-The demo is then at `https://<user>.github.io/<repo>/`. APKs are on each run's page under **Artifacts -> apk-release**.
