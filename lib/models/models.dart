@@ -32,6 +32,10 @@ class UserProfile {
   final Color color;
   final List<String> childIds;
   final String phone;
+
+  /// Unique student ID printed on the student card, e.g. `RB2-1001`.
+  /// Used to sign in. Empty for parents and teachers (they use their phone).
+  final String code;
   const UserProfile({
     required this.id,
     required this.name,
@@ -41,6 +45,7 @@ class UserProfile {
     this.color = AppColors.primary,
     this.childIds = const [],
     this.phone = '',
+    this.code = '',
   });
 }
 
@@ -293,6 +298,82 @@ class AppNotification {
     required this.icon,
     required this.color,
     this.read = false,
+  });
+}
+
+/// A subscription plan sold by Dr. Rashia (unlocks premium video lessons).
+class Plan {
+  final String id;
+  final Bi name;
+  final Bi perk;
+  final int months;
+  final double price;
+  final bool best;
+  const Plan(this.id, this.name, this.perk, this.months, this.price,
+      {this.best = false});
+}
+
+enum SubSource { code, payment, manual }
+
+class Subscription {
+  final String studentId;
+  final String planId;
+  final DateTime start;
+  final DateTime end;
+  final SubSource source;
+  const Subscription({
+    required this.studentId,
+    required this.planId,
+    required this.start,
+    required this.end,
+    required this.source,
+  });
+
+  bool get active => end.isAfter(DateTime.now());
+  int get daysLeft => end.difference(DateTime.now()).inDays;
+}
+
+/// Prepaid activation code (printed on cards / sent by WhatsApp).
+class ActivationCode {
+  final String code;
+  final String planId;
+  final int grade;
+  final DateTime created;
+  String? usedBy;
+  DateTime? usedAt;
+  ActivationCode({
+    required this.code,
+    required this.planId,
+    required this.grade,
+    required this.created,
+    this.usedBy,
+    this.usedAt,
+  });
+  bool get used => usedBy != null;
+}
+
+class Lesson {
+  final String id;
+  final Bi title;
+  final Bi description;
+  final int grade;
+  final Bi chapter;
+  final String videoUrl;
+  final int minutes;
+  final bool premium;
+  final int order;
+  final DateTime added;
+  const Lesson({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.grade,
+    required this.chapter,
+    required this.videoUrl,
+    required this.minutes,
+    required this.premium,
+    required this.order,
+    required this.added,
   });
 }
 

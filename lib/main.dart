@@ -5,17 +5,35 @@ import 'package:provider/provider.dart';
 import 'core/theme.dart';
 import 'data/app_state.dart';
 import 'models/models.dart';
+import 'services/firebase_cloud.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/splash_screen.dart';
 import 'screens/shell/parent_shell.dart';
 import 'screens/shell/student_shell.dart';
 import 'screens/shell/teacher_shell.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Firebase when configured (see FIREBASE_SETUP.md), offline demo otherwise.
+  final cloud = await FirebaseCloud.tryInit();
+  final state = AppState.seeded(cloud: cloud);
+  if (cloud != null) {
+    final saved = await cloud.currentUser();
+    if (saved != null) {
+      state.users.add(saved);
+      try {
+        await cloud.load(state..me = saved);
+        state.login(saved);
+      } catch (_) {
+        state.me = null;
+      }
+    }
+  }
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => AppState.seeded(),
+    ChangeNotifierProvider.value(
+      value: state,
       child: const RashiaApp(),
     ),
   );

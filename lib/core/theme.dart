@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   static const primary = Color(0xFF0E7C66);
@@ -46,7 +45,8 @@ class AppTheme {
       error: AppColors.coral,
     );
     final base = ThemeData(brightness: b, useMaterial3: true);
-    final text = GoogleFonts.cairoTextTheme(base.textTheme).apply(
+    final text = base.textTheme.apply(
+      fontFamily: 'Cairo',
       bodyColor: scheme.onSurface,
       displayColor: scheme.onSurface,
     );

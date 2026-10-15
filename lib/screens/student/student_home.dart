@@ -10,6 +10,7 @@ import '../common/dashboard_widgets.dart';
 import '../common/progress_screen.dart';
 import '../common/question_bank_screen.dart';
 import '../common/store_screen.dart';
+import '../common/subscription_screen.dart';
 import '../common/tickets_screen.dart';
 
 class StudentHome extends StatelessWidget {
@@ -78,7 +79,7 @@ class StudentHome extends StatelessWidget {
                     _HeroStat(
                         value: '$pending',
                         label: context.tr('واجبات مطلوبة', 'Homework due'),
-                        onTap: () => onTab(2)),
+                        onTap: () => onTab(3)),
                   ],
                 ),
               ],
@@ -93,7 +94,7 @@ class StudentHome extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: AppCard(
-                      onTap: () => onTab(1),
+                      onTap: () => onTab(2),
                       gradient: const LinearGradient(
                           colors: [AppColors.violet, Color(0xFF5A3FA0)]),
                       border: false,
@@ -120,13 +121,37 @@ class StudentHome extends StatelessWidget {
                       ]),
                     ),
                   ),
+                if (!s.hasAccess(me.id))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: AppCard(
+                      onTap: () => go(context, SubscriptionScreen(studentId: me.id)),
+                      color: AppColors.amber.withValues(alpha: context.isDark ? 0.16 : 0.12),
+                      child: Row(children: [
+                        const Icon(Icons.workspace_premium_rounded, color: AppColors.amber, size: 34),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(context.tr('افتح كل الدروس المدفوعة', 'Unlock all premium lessons'),
+                                  style: const TextStyle(fontWeight: FontWeight.w800)),
+                              Text(context.tr('اشترك أو فعّل كود الاشتراك', 'Subscribe or redeem a code'),
+                                  style: TextStyle(color: context.muted, fontSize: 12.5)),
+                            ],
+                          ),
+                        ),
+                        Icon(Icons.chevron_right_rounded, color: context.muted),
+                      ]),
+                    ),
+                  ),
                 SectionHeader(context.tr('الوصول السريع', 'Quick access')),
                 QuickActionGrid([
-                  QuickAction(Icons.quiz_rounded, AppColors.violet, 'الامتحانات', 'Exams', () => onTab(1)),
+                  QuickAction(Icons.quiz_rounded, AppColors.violet, 'الامتحانات', 'Exams', () => onTab(2)),
                   QuickAction(Icons.help_center_rounded, AppColors.sky, 'بنك الأسئلة', 'Question bank',
                       () => go(context, const QuestionBankScreen())),
-                  QuickAction(Icons.assignment_rounded, AppColors.amber, 'الواجبات', 'Homework', () => onTab(2)),
-                  QuickAction(Icons.folder_copy_rounded, AppColors.primary, 'المواد', 'Materials', () => onTab(3)),
+                  QuickAction(Icons.assignment_rounded, AppColors.amber, 'الواجبات', 'Homework', () => onTab(3)),
+                  QuickAction(Icons.play_circle_rounded, AppColors.primary, 'الدروس', 'Lessons', () => onTab(1)),
                   QuickAction(Icons.event_available_rounded, AppColors.leaf, 'الحضور', 'Attendance',
                       () => go(context, AttendanceScreen(studentId: me.id))),
                   QuickAction(Icons.storefront_rounded, AppColors.rose, 'المتجر', 'Store',
@@ -141,8 +166,8 @@ class StudentHome extends StatelessWidget {
                 TodayClassesCard(grade: me.grade),
                 UpcomingList(
                   studentId: me.id,
-                  onExams: () => onTab(1),
-                  onHomework: () => onTab(2),
+                  onExams: () => onTab(2),
+                  onHomework: () => onTab(3),
                 ),
                 AnnouncementPreview(grade: me.grade),
               ],

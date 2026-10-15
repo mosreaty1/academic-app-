@@ -11,6 +11,7 @@ import '../common/dashboard_widgets.dart';
 import '../common/exams_screen.dart';
 import '../common/homework_screen.dart';
 import '../common/progress_screen.dart';
+import '../common/subscription_screen.dart';
 import '../common/tickets_screen.dart';
 
 class ParentHome extends StatelessWidget {
@@ -188,6 +189,8 @@ class ParentHome extends StatelessWidget {
                       () => go(context, ExamsScreen(studentId: kid.id))),
                   QuickAction(Icons.assignment_rounded, AppColors.amber, 'الواجبات', 'Homework',
                       () => go(context, HomeworkScreen(studentId: kid.id))),
+                  QuickAction(Icons.workspace_premium_rounded, AppColors.amber, 'الاشتراك', 'Subscription',
+                      () => go(context, SubscriptionScreen(studentId: kid.id))),
                   QuickAction(Icons.storefront_rounded, AppColors.rose, 'المتجر', 'Store', () => onTab(3)),
                   QuickAction(Icons.support_agent_rounded, AppColors.coral, 'راسل المعلمة', 'Contact',
                       () => go(context, const TicketsScreen())),

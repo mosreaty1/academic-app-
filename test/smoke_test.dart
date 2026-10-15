@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:rashia_academy/data/app_state.dart';
 import 'package:rashia_academy/main.dart';
 
 Future<AppState> boot(WidgetTester t, String uid, {bool ar = true}) async {
-  GoogleFonts.config.allowRuntimeFetching = false;
   t.view.physicalSize = const Size(1170, 2532);
   t.view.devicePixelRatio = 3;
   final state = AppState.seeded()..isAr = ar;

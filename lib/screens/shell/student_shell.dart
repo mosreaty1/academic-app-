@@ -8,11 +8,13 @@ import '../common/announcements_screen.dart';
 import '../common/attendance_screen.dart';
 import '../common/exams_screen.dart';
 import '../common/homework_screen.dart';
+import '../common/lessons_screen.dart';
 import '../common/materials_screen.dart';
 import '../common/more_screen.dart';
 import '../common/progress_screen.dart';
 import '../common/question_bank_screen.dart';
 import '../common/store_screen.dart';
+import '../common/subscription_screen.dart';
 import '../common/tickets_screen.dart';
 import '../student/student_home.dart';
 
@@ -32,10 +34,14 @@ class _StudentShellState extends State<StudentShell> {
     final id = s.me!.id;
     final pages = <Widget>[
       StudentHome(onTab: (i) => setState(() => _index = i)),
+      const LessonsScreen(),
       ExamsScreen(studentId: id),
       HomeworkScreen(studentId: id),
-      const MaterialsScreen(),
       MoreScreen(entries: [
+        MenuEntry(Icons.workspace_premium_rounded, AppColors.amber, 'الاشتراك', 'Subscription',
+            () => SubscriptionScreen(studentId: id)),
+        MenuEntry(Icons.folder_copy_rounded, AppColors.primary, 'المواد التعليمية', 'Study materials',
+            () => const MaterialsScreen()),
         MenuEntry(Icons.help_center_rounded, AppColors.sky, 'بنك الأسئلة', 'Question bank',
             () => const QuestionBankScreen()),
         MenuEntry(Icons.event_available_rounded, AppColors.leaf, 'سجل الحضور', 'Attendance',
@@ -63,6 +69,10 @@ class _StudentShellState extends State<StudentShell> {
               selectedIcon: const Icon(Icons.home_rounded),
               label: context.tr('الرئيسية', 'Home')),
           NavigationDestination(
+              icon: const Icon(Icons.play_circle_outline_rounded),
+              selectedIcon: const Icon(Icons.play_circle_rounded),
+              label: context.tr('الدروس', 'Lessons')),
+          NavigationDestination(
               icon: const Icon(Icons.quiz_outlined),
               selectedIcon: const Icon(Icons.quiz_rounded),
               label: context.tr('الامتحانات', 'Exams')),
@@ -70,10 +80,6 @@ class _StudentShellState extends State<StudentShell> {
               icon: const Icon(Icons.assignment_outlined),
               selectedIcon: const Icon(Icons.assignment_rounded),
               label: context.tr('الواجبات', 'Homework')),
-          NavigationDestination(
-              icon: const Icon(Icons.folder_copy_outlined),
-              selectedIcon: const Icon(Icons.folder_copy_rounded),
-              label: context.tr('المواد', 'Materials')),
           NavigationDestination(
               icon: const Icon(Icons.grid_view_outlined),
               selectedIcon: const Icon(Icons.grid_view_rounded),

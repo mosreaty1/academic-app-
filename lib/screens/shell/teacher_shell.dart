@@ -5,6 +5,7 @@ import '../../core/l10n.dart';
 import '../../core/theme.dart';
 import '../../data/app_state.dart';
 import '../common/announcements_screen.dart';
+import '../common/lessons_screen.dart';
 import '../common/materials_screen.dart';
 import '../common/more_screen.dart';
 import '../common/store_screen.dart';
@@ -14,6 +15,7 @@ import '../teacher/teacher_attendance.dart';
 import '../teacher/teacher_exams.dart';
 import '../teacher/teacher_home.dart';
 import '../teacher/teacher_homework.dart';
+import '../teacher/teacher_subscriptions.dart';
 
 class TeacherShell extends StatefulWidget {
   const TeacherShell({super.key});
@@ -34,6 +36,10 @@ class _TeacherShellState extends State<TeacherShell> {
       const TeacherExamsScreen(),
       const TeacherHomeworkScreen(),
       MoreScreen(entries: [
+        MenuEntry(Icons.play_circle_rounded, AppColors.primary, 'دروس الفيديو', 'Video lessons',
+            () => const LessonsScreen()),
+        MenuEntry(Icons.workspace_premium_rounded, AppColors.amber, 'الاشتراكات والأكواد', 'Subscriptions & codes',
+            () => const TeacherSubscriptionsScreen()),
         MenuEntry(Icons.groups_rounded, AppColors.violet, 'الطلاب', 'Students',
             () => const StudentsScreen()),
         MenuEntry(Icons.folder_copy_rounded, AppColors.primary, 'المواد التعليمية', 'Study materials',

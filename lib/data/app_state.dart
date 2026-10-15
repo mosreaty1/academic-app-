@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../core/l10n.dart';
 import '../core/theme.dart';
 import '../models/models.dart';
+import '../services/cloud_sync.dart';
 import 'seed.dart';
 
 /// Single source of truth for the demo app.
@@ -11,13 +14,18 @@ import 'seed.dart';
 /// backend (Firebase / REST), replace the mutating methods below with API calls
 /// and keep the same getters - the UI only talks to this class.
 class AppState extends ChangeNotifier {
-  AppState();
+  AppState({this.cloud});
 
-  factory AppState.seeded() {
-    final s = AppState();
-    Seed.populate(s);
+  /// Demo data. When [cloud] is set, students/teachers come from Firebase and
+  /// only the lesson content (questions, exams, ...) is seeded locally.
+  factory AppState.seeded({CloudSync? cloud}) {
+    final s = AppState(cloud: cloud);
+    Seed.populate(s, cloud: cloud != null);
     return s;
   }
+
+  final CloudSync? cloud;
+  bool get isCloud => cloud != null;
 
   // ---- Preferences ---------------------------------------------------------
   bool isAr = true;
@@ -48,7 +56,30 @@ class AppState extends ChangeNotifier {
   void logout() {
     me = null;
     cart.clear();
+    cloud?.signOut();
     notifyListeners();
+  }
+
+  /// Signs in with a student ID (e.g. `RB2-1001`) or a phone number.
+  /// Returns an error code (`not_found`, `wrong_password`, `invalid`, `network`, `other`)
+  /// or null on success.
+  Future<String?> signIn(String id, String password) async {
+    final key = id.trim().toLowerCase();
+    if (key.isEmpty || password.isEmpty) return 'not_found';
+    if (cloud != null) {
+      final r = await cloud!.signIn(key, password);
+      if (r.user == null) return r.error ?? 'other';
+      if (!users.any((u) => u.id == r.user!.id)) users.add(r.user!);
+      await cloud!.load(this);
+      login(r.user!);
+      return null;
+    }
+    final match = users.where(
+        (u) => u.code.toLowerCase() == key || (u.code.isEmpty && u.phone == key));
+    if (match.isEmpty) return 'not_found';
+    if (password != Seed.demoPassword) return 'wrong_password';
+    login(match.first);
+    return null;
   }
 
   UserProfile user(String id) => users.firstWhere((u) => u.id == id);
@@ -427,6 +458,216 @@ class AppState extends ChangeNotifier {
 
   int get openTicketCount =>
       tickets.where((t) => t.status != TicketStatus.resolved).length;
+
+  // ---- Lessons (video) -----------------------------------------------------
+  final List<Lesson> lessons = [];
+  // studentId -> lessonId -> watched fraction 0..1
+  final Map<String, Map<String, double>> lessonProgress = {};
+
+  List<Lesson> lessonsOfGrade(int g) =>
+      lessons.where((l) => l.grade == g).toList()
+        ..sort((a, b) => a.order.compareTo(b.order));
+
+  double progressOf(String sid, String lessonId) =>
+      lessonProgress[sid]?[lessonId] ?? 0;
+
+  void setLessonProgress(String sid, String lessonId, double v) {
+    final cur = progressOf(sid, lessonId);
+    if (v <= cur) return;
+    lessonProgress.putIfAbsent(sid, () => {})[lessonId] = v.clamp(0, 1);
+    cloud?.saveProgress(sid, lessonId, v.clamp(0, 1).toDouble());
+    notifyListeners();
+  }
+
+  void addLesson(Lesson l) {
+    lessons.add(l);
+    cloud?.saveLesson(l);
+    notifications.insert(
+      0,
+      AppNotification(
+        id: 'n${notifications.length + 100}',
+        title: const Bi('درس جديد', 'New lesson'),
+        body: l.title,
+        at: DateTime.now(),
+        icon: Icons.play_circle_rounded,
+        color: AppColors.violet,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void removeLesson(String id) {
+    lessons.removeWhere((l) => l.id == id);
+    cloud?.deleteLesson(id);
+    notifyListeners();
+  }
+
+  // ---- Subscriptions ---------------------------------------------------------
+  static const plans = <Plan>[
+    Plan('monthly', Bi('شهري', 'Monthly'), Bi('كل الدروس لمدة شهر', 'All lessons for 1 month'), 1, 150),
+    Plan('term', Bi('ترم كامل', 'Full term'), Bi('4 شهور بخصم 20%', '4 months, save 20%'), 4, 480, best: true),
+    Plan('year', Bi('سنوي', 'Yearly'), Bi('سنة كاملة بأفضل سعر', 'Best value, 12 months'), 12, 1200),
+  ];
+
+  static Plan plan(String id) => plans.firstWhere((p) => p.id == id);
+
+  final List<Subscription> subscriptions = [];
+  final List<ActivationCode> codes = [];
+
+  Subscription? subscriptionOf(String sid) {
+    Subscription? best;
+    for (final x in subscriptions.where((x) => x.studentId == sid)) {
+      if (best == null || x.end.isAfter(best.end)) best = x;
+    }
+    return best;
+  }
+
+  bool hasAccess(String sid) => subscriptionOf(sid)?.active ?? false;
+
+  bool canWatch(String sid, Lesson l) => !l.premium || hasAccess(sid);
+
+  int get activeSubscribers =>
+      students.where((u) => hasAccess(u.id)).length;
+
+  /// Adds the plan's months on top of any still-running subscription.
+  Subscription grantSubscription(String sid, Plan p, SubSource src) {
+    final now = DateTime.now();
+    final cur = subscriptionOf(sid);
+    final from = (cur != null && cur.active) ? cur.end : now;
+    final end = DateTime(from.year, from.month + p.months, from.day);
+    final sub = Subscription(
+        studentId: sid, planId: p.id, start: now, end: end, source: src);
+    subscriptions.add(sub);
+    cloud?.saveSubscription(sub);
+    notifications.insert(
+      0,
+      AppNotification(
+        id: 'n${notifications.length + 100}',
+        title: const Bi('تم تفعيل الاشتراك', 'Subscription activated'),
+        body: Bi('خطة ${p.name.ar} حتى ${end.day}/${end.month}/${end.year}',
+            '${p.name.en} plan until ${end.day}/${end.month}/${end.year}'),
+        at: now,
+        icon: Icons.workspace_premium_rounded,
+        color: AppColors.amber,
+      ),
+    );
+    notifyListeners();
+    return sub;
+  }
+
+  /// Mock checkout - replace with a real gateway (Fawry / Paymob) callback.
+  Subscription payForPlan(String sid, Plan p, PayMethod method) =>
+      grantSubscription(sid, p, SubSource.payment);
+
+  /// Returns `ok`, `invalid`, `used` or `wrong_grade`.
+  Future<String> redeemCode(String sid, String raw) async {
+    final code = raw.trim().toUpperCase();
+    if (code.isEmpty) return 'invalid';
+    final grade = user(sid).grade;
+    if (cloud != null) {
+      final r = await cloud!.claimCode(code, sid);
+      if (r != 'ok') return r;
+      // The claimed code's plan is stored in Firestore; reload to read it.
+      await cloud!.load(this);
+      notifyListeners();
+      return 'ok';
+    }
+    final c = codes.where((c) => c.code == code);
+    if (c.isEmpty) return 'invalid';
+    final ac = c.first;
+    if (ac.used) return 'used';
+    if (ac.grade != 0 && ac.grade != grade) return 'wrong_grade';
+    ac.usedBy = sid;
+    ac.usedAt = DateTime.now();
+    grantSubscription(sid, plan(ac.planId), SubSource.code);
+    return 'ok';
+  }
+
+  List<ActivationCode> generateCodes(String planId, int grade, int n) {
+    final out = <ActivationCode>[];
+    final rnd = Random.secure();
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    for (var i = 0; i < n; i++) {
+      String code;
+      do {
+        final b = StringBuffer();
+        for (var k = 0; k < 8; k++) {
+          b.write(chars[rnd.nextInt(chars.length)]);
+          if (k == 3) b.write('-');
+        }
+        code = b.toString();
+      } while (codes.any((c) => c.code == code));
+      final c = ActivationCode(
+          code: code,
+          planId: planId,
+          grade: grade,
+          created: DateTime.now());
+      codes.insert(0, c);
+      cloud?.saveCode(c);
+      out.add(c);
+    }
+    notifyListeners();
+    return out;
+  }
+
+  // ---- Students (IDs) ----------------------------------------------------------
+  String nextStudentCode(int grade) {
+    final n = students.where((s) => s.grade == grade).length;
+    var i = 1000 + n + 1;
+    while (users.any((u) => u.code == 'RB$grade-$i')) {
+      i++;
+    }
+    return 'RB$grade-$i';
+  }
+
+  /// Registers a student and returns the credentials to hand over.
+  Future<UserProfile> addStudent({
+    required Bi name,
+    required int grade,
+    required String section,
+    required String parentPhone,
+    required String password,
+  }) async {
+    var u = UserProfile(
+      id: 'st${DateTime.now().microsecondsSinceEpoch}',
+      name: name,
+      role: UserRole.student,
+      grade: grade,
+      section: '$grade/$section',
+      color: [AppColors.primary, AppColors.sky, AppColors.violet, AppColors.rose, AppColors.amber][users.length % 5],
+      phone: parentPhone,
+      code: nextStudentCode(grade),
+    );
+    if (cloud != null) {
+      final uid = await cloud!.createStudent(u, password);
+      u = UserProfile(
+          id: uid,
+          name: u.name,
+          role: u.role,
+          grade: u.grade,
+          section: u.section,
+          color: u.color,
+          phone: u.phone,
+          code: u.code);
+    }
+    users.add(u);
+    // Link to a parent account with the same phone number.
+    for (var i = 0; i < users.length; i++) {
+      final p = users[i];
+      if (p.role == UserRole.parent && p.phone == parentPhone && parentPhone.isNotEmpty) {
+        users[i] = UserProfile(
+            id: p.id,
+            name: p.name,
+            role: p.role,
+            color: p.color,
+            phone: p.phone,
+            childIds: [...p.childIds, u.id]);
+        if (me?.id == p.id) me = users[i];
+      }
+    }
+    notifyListeners();
+    return u;
+  }
 
   // ---- Announcements & notifications --------------------------------------
   final List<Announcement> announcements = [];

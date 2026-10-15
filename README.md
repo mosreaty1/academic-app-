@@ -18,7 +18,7 @@ Fully bilingual (**Arabic RTL** by default / English), light + dark mode, one co
 | Progress report | exam bars + chapter mastery | ✅ | per-student reports |
 | Announcements & notifications | ✅ | ✅ | publish (per grade) |
 
-Demo login: pick a role (and a grade for students) on the sign-in screen – no real credentials needed.
+Demo login (offline mode): tap a demo account chip on the sign-in screen (password `123456`).
 
 ## Run
 
@@ -29,8 +29,14 @@ flutter run -d chrome  # web preview
 flutter test           # smoke + flow tests
 ```
 
-Requires Flutter 3.32+ (tested on 3.47 stable). The Cairo font is fetched by `google_fonts`
-on first launch; bundle it under `assets/` for fully offline use.
+Requires Flutter 3.32+ (tested on 3.47 stable). The Cairo font is bundled, so the app works offline.
+
+## New: IDs, video lessons, subscriptions, Firebase
+
+- **Student ID** (`RB2-1001`): printed on every student's ID card, used to sign in. The teacher issues IDs when adding students.
+- **Video lessons**: per-grade, chapter-grouped, free vs. premium, in-app player with speed / seek controls and per-lesson progress tracking.
+- **Subscriptions**: monthly / term / yearly plans, prepaid activation codes, manual activation by the teacher, parent can subscribe for a child.
+- **Firebase**: Auth + Firestore, see [FIREBASE_SETUP.md](FIREBASE_SETUP.md). Without a Firebase project the app runs in demo mode.
 
 ## Architecture
 

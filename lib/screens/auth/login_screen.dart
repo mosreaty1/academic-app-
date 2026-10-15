@@ -6,7 +6,6 @@ import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../data/app_state.dart';
 import '../../data/seed.dart';
-import '../../models/models.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,12 +15,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  UserRole _role = UserRole.student;
-  int _grade = 2;
   bool _obscure = true;
   bool _loading = false;
-  final _id = TextEditingController();
-  final _pass = TextEditingController(text: '123456');
+  String? _error;
+  final _id = TextEditingController(text: 'RB2-1001');
+  final _pass = TextEditingController(text: Seed.demoPassword);
 
   @override
   void dispose() {
@@ -30,43 +28,40 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  String _demoId(AppState s) {
-    switch (_role) {
-      case UserRole.student:
-        return s.user(Seed.demoStudentByGrade[_grade]!).phone.isNotEmpty
-            ? s.user(Seed.demoStudentByGrade[_grade]!).phone
-            : 'S-${Seed.demoStudentByGrade[_grade]}';
-      case UserRole.parent:
-        return s.user('p1').phone;
-      case UserRole.teacher:
-        return s.user('t1').phone;
+  String _errorText(BuildContext c, String code) {
+    switch (code) {
+      case 'not_found':
+        return c.tr('كود الطالب أو رقم الموبايل غير مسجل', 'Student ID or phone number not found');
+      case 'wrong_password':
+        return c.tr('كلمة المرور غير صحيحة', 'Incorrect password');
+      case 'invalid':
+        return c.tr('الكود أو كلمة المرور غير صحيحة', 'Incorrect ID or password');
+      case 'network':
+        return c.tr('تعذر الاتصال. تحقق من الإنترنت', 'Network error. Check your connection');
+      default:
+        return c.tr('تعذر تسجيل الدخول. حاول مرة أخرى', 'Could not sign in. Please try again');
     }
   }
 
   Future<void> _login() async {
     final s = context.read<AppState>();
-    setState(() => _loading = true);
-    await Future<void>.delayed(const Duration(milliseconds: 600));
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    final err = await s.signIn(_id.text, _pass.text);
     if (!mounted) return;
-    switch (_role) {
-      case UserRole.student:
-        s.login(s.user(Seed.demoStudentByGrade[_grade]!));
-      case UserRole.parent:
-        s.login(s.user('p1'));
-      case UserRole.teacher:
-        s.login(s.user('t1'));
+    if (err != null) {
+      setState(() {
+        _loading = false;
+        _error = _errorText(context, err);
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final s = context.watch<AppState>();
-    _id.text = _demoId(s);
-    final roles = <(UserRole, IconData, String, String)>[
-      (UserRole.student, Icons.school_rounded, 'طالب', 'Student'),
-      (UserRole.parent, Icons.family_restroom_rounded, 'ولي أمر', 'Parent'),
-      (UserRole.teacher, Icons.science_rounded, 'المعلمة', 'Teacher'),
-    ];
     return Scaffold(
       body: ListView(
         padding: EdgeInsets.zero,
@@ -118,60 +113,19 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(context.tr('أنا...', 'I am a...'),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w800, fontSize: 15)),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    for (final r in roles)
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: _RoleTile(
-                            icon: r.$2,
-                            label: context.tr(r.$3, r.$4),
-                            selected: _role == r.$1,
-                            onTap: () => setState(() => _role = r.$1),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                if (_role == UserRole.student) ...[
-                  const SizedBox(height: 22),
-                  Text(context.tr('الصف الدراسي', 'Grade'),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w800, fontSize: 15)),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      for (final g in const [1, 2, 3])
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            child: _GradeTile(
-                              label: gradeTiny(context, g),
-                              selected: _grade == g,
-                              onTap: () => setState(() => _grade = g),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-                const SizedBox(height: 22),
-                Text(
-                    _role == UserRole.student
-                        ? context.tr('كود الطالب / رقم الموبايل', 'Student ID / phone')
-                        : context.tr('رقم الموبايل', 'Phone number'),
+                Text(context.tr('كود الطالب / رقم الموبايل', 'Student ID / phone number'),
                     style: const TextStyle(fontWeight: FontWeight.w700)),
                 const SizedBox(height: 6),
                 TextField(
                   controller: _id,
-                  keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.phone_iphone_rounded)),
+                  textDirection: TextDirection.ltr,
+                  textCapitalization: TextCapitalization.characters,
+                  decoration: InputDecoration(
+                    hintText: 'RB2-1001',
+                    prefixIcon: const Icon(Icons.badge_outlined),
+                    helperText: context.tr('الطالب يدخل بكود الطالب، وولي الأمر والمعلمة برقم الموبايل',
+                        'Students use their Student ID; parents and teachers use their phone'),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(context.tr('كلمة المرور', 'Password'),
@@ -180,6 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextField(
                   controller: _pass,
                   obscureText: _obscure,
+                  onSubmitted: (_) => _login(),
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock_outline_rounded),
                     suffixIcon: IconButton(
@@ -190,17 +145,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: TextButton(
-                    onPressed: () => toast(
-                        context,
-                        context.tr('سيتم إرسال رمز الاستعادة على موبايلك',
-                            'A reset code will be sent to your phone')),
-                    child: Text(context.tr('نسيت كلمة المرور؟', 'Forgot password?')),
+                if (_error != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Row(children: [
+                      const Icon(Icons.error_outline_rounded,
+                          color: AppColors.coral, size: 18),
+                      const SizedBox(width: 6),
+                      Expanded(
+                          child: Text(_error!,
+                              style: const TextStyle(
+                                  color: AppColors.coral,
+                                  fontWeight: FontWeight.w700))),
+                    ]),
                   ),
-                ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 20),
                 FilledButton(
                   onPressed: _loading ? null : _login,
                   child: _loading
@@ -211,110 +170,55 @@ class _LoginScreenState extends State<LoginScreen> {
                               strokeWidth: 2.5, color: Colors.white))
                       : Text(context.tr('تسجيل الدخول', 'Sign in')),
                 ),
-                const SizedBox(height: 18),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                      color: context.brandSoft,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline_rounded, color: context.brand),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                            context.tr(
-                                'نسخة تجريبية: اختر الدور والصف ثم اضغط تسجيل الدخول لاستعراض التطبيق ببيانات تجريبية.',
-                                'Demo build: pick a role and grade, then sign in to explore the app with sample data.'),
-                            style: const TextStyle(fontSize: 12.5, height: 1.5)),
-                      ),
-                    ],
+                const SizedBox(height: 6),
+                Center(
+                  child: TextButton(
+                    onPressed: () => toast(
+                        context,
+                        context.tr('تواصل مع د. راشيا لإعادة تعيين كلمة المرور',
+                            'Contact Dr. Rashia to reset your password')),
+                    child: Text(context.tr('نسيت كلمة المرور؟', 'Forgot password?')),
                   ),
                 ),
+                const SizedBox(height: 10),
+                if (!s.isCloud) ...[
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                        color: context.brandSoft,
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          Icon(Icons.info_outline_rounded, color: context.brand, size: 20),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                                context.tr('وضع تجريبي (Firebase غير مفعّل). اختر حساباً للتجربة، كلمة المرور ${Seed.demoPassword}',
+                                    'Demo mode (Firebase not connected). Tap an account; password is ${Seed.demoPassword}'),
+                                style: const TextStyle(fontSize: 12.5, height: 1.5)),
+                          ),
+                        ]),
+                        const SizedBox(height: 10),
+                        Wrap(spacing: 8, runSpacing: 8, children: [
+                          for (final d in Seed.demoLogins)
+                            ActionChip(
+                              label: Text(context.tr(d.$2, d.$3)),
+                              onPressed: () => setState(() {
+                                _id.text = d.$1;
+                                _pass.text = Seed.demoPassword;
+                              }),
+                            ),
+                        ]),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _RoleTile extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  const _RoleTile(
-      {required this.icon,
-      required this.label,
-      required this.selected,
-      required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      decoration: BoxDecoration(
-        color: selected ? context.cs.primary : context.card,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: selected ? context.cs.primary : context.line),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(18),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            children: [
-              Icon(icon,
-                  size: 28, color: selected ? Colors.white : context.brand),
-              const SizedBox(height: 8),
-              Text(label,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      color: selected ? Colors.white : context.ink)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _GradeTile extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  const _GradeTile(
-      {required this.label, required this.selected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      decoration: BoxDecoration(
-        color: selected ? context.brandSoft : context.card,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-            color: selected ? context.cs.primary : context.line,
-            width: selected ? 2 : 1),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Center(
-            child: Text(label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 13,
-                    color: selected ? context.brand : context.ink)),
-          ),
-        ),
       ),
     );
   }

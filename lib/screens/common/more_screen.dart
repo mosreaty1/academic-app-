@@ -6,6 +6,7 @@ import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../data/app_state.dart';
 import '../../models/models.dart';
+import 'student_id_card.dart';
 
 class MenuEntry {
   final IconData icon;
@@ -37,6 +38,9 @@ class MoreScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
         children: [
+          if (me.role == UserRole.student)
+            StudentIdCard(student: me)
+          else
           AppCard(
             gradient: const LinearGradient(
                 colors: [AppColors.primary, AppColors.primaryDark]),

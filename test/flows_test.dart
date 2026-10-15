@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:rashia_academy/core/theme.dart';
 import 'package:rashia_academy/data/app_state.dart';
@@ -22,7 +21,6 @@ import 'package:rashia_academy/screens/teacher/teacher_homework.dart';
 
 Future<AppState> host(WidgetTester t, String uid, Widget screen,
     {bool ar = true, bool dark = false}) async {
-  GoogleFonts.config.allowRuntimeFetching = false;
   t.view.physicalSize = const Size(1080, 2200); // 360 x ~733 dp
   t.view.devicePixelRatio = 3;
   addTearDown(t.view.reset);

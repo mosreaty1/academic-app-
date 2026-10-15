@@ -8,12 +8,22 @@ import 'app_state.dart';
 /// Demo data for Dr. Rashia's Biology classes (Egyptian Secondary 1 / 2 / 3).
 class Seed {
   static const demoStudentByGrade = {1: 's2', 2: 's1', 3: 's11'};
+  static const demoPassword = '123456';
 
-  static void populate(AppState s) {
+  /// Quick-fill accounts shown on the demo login screen.
+  static const demoLogins = <(String, String, String)>[
+    ('RB1-1001', 'طالبة أولى ثانوي', 'Student • Grade 1'),
+    ('RB2-1001', 'طالب تانية ثانوي', 'Student • Grade 2'),
+    ('RB3-1001', 'طالبة تالتة ثانوي', 'Student • Grade 3'),
+    ('01112223344', 'ولي أمر', 'Parent'),
+    ('01001234567', 'د. راشيا', 'Teacher'),
+  ];
+
+  static void populate(AppState s, {bool cloud = false}) {
     final now = DateTime.now();
     final today = dayOnly(now);
 
-    _users(s);
+    if (!cloud) _users(s);
     _timetable(s);
     _questions(s);
     _exams(s, today);
@@ -24,21 +34,35 @@ class Seed {
     _tickets(s, now);
     _announcements(s, today);
     _notifications(s, now);
-    _practice(s);
+    _lessons(s, today);
+    if (cloud) {
+      // Student-linked records come from Firebase, not the demo seed.
+      s.attempts.clear();
+      s.submissions.clear();
+      s.attendance.clear();
+      s.orders.clear();
+      s.tickets.clear();
+    } else {
+      _practice(s);
+      _subscriptions(s, now);
+    }
   }
 
   // ---------------------------------------------------------------- users --
   static void _users(AppState s) {
+    final counters = <int, int>{};
     UserProfile st(String id, String ar, String en, int g, String sec,
-            Color c, {String phone = ''}) =>
-        UserProfile(
-            id: id,
-            name: Bi(ar, en),
-            role: UserRole.student,
-            grade: g,
-            section: '$g/$sec',
-            color: c,
-            phone: phone);
+        Color c) {
+      final n = (counters[g] = (counters[g] ?? 1000) + 1);
+      return UserProfile(
+          id: id,
+          name: Bi(ar, en),
+          role: UserRole.student,
+          grade: g,
+          section: '$g/$sec',
+          color: c,
+          code: 'RB$g-$n');
+    }
 
     s.users.addAll([
       const UserProfile(
@@ -56,10 +80,8 @@ class Seed {
         childIds: ['s1', 's2'],
         phone: '01112223344',
       ),
-      st('s1', 'آدم محمود', 'Adam Mahmoud', 2, 'B', AppColors.violet,
-          phone: '01112223344'),
-      st('s2', 'ليلى محمود', 'Laila Mahmoud', 1, 'A', AppColors.rose,
-          phone: '01112223344'),
+      st('s1', 'آدم محمود', 'Adam Mahmoud', 2, 'B', AppColors.violet),
+      st('s2', 'ليلى محمود', 'Laila Mahmoud', 1, 'A', AppColors.rose),
       st('s3', 'يوسف حسن', 'Youssef Hassan', 1, 'A', AppColors.sky),
       st('s4', 'مريم علي', 'Mariam Ali', 1, 'A', AppColors.amber),
       st('s5', 'عمر خالد', 'Omar Khaled', 1, 'B', AppColors.primary),
@@ -560,5 +582,74 @@ class Seed {
     r2.addAll({'q11': true, 'q12': true, 'q14': false, 'q15': true});
     final r3 = s.practice.putIfAbsent('s11', () => {});
     r3.addAll({'q31': true, 'q32': false, 'q34': true, 'q35': true});
+  }
+
+  // -------------------------------------------------------------- lessons --
+  static void _lessons(AppState s, DateTime today) {
+    const bee =
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4';
+    const butterfly =
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4';
+    var n = 0;
+    Lesson l(String ar, String en, String dAr, String dEn, int g, Bi ch,
+        int min, bool premium) {
+      n++;
+      return Lesson(
+        id: 'l$n',
+        title: Bi(ar, en),
+        description: Bi(dAr, dEn),
+        grade: g,
+        chapter: ch,
+        videoUrl: n.isEven ? bee : butterfly,
+        minutes: min,
+        premium: premium,
+        order: n,
+        added: today.subtract(Duration(days: 30 - n)),
+      );
+    }
+
+    const g1a = Bi('تركيب الخلية', 'Cell Structure');
+    const g1b = Bi('الانقسام الخلوي', 'Cell Division');
+    const g2a = Bi('الهضم والامتصاص', 'Digestion & Absorption');
+    const g2b = Bi('الدورة الدموية', 'Circulation');
+    const g3a = Bi('الوراثة وDNA', 'Genetics & DNA');
+    const g3b = Bi('الهرمونات', 'Hormones');
+    s.lessons.addAll([
+      l('مقدمة: ما هي الخلية؟', 'Intro: What is a cell?', 'نظرة عامة على الخلية ومكوناتها.', 'Overview of the cell and its parts.', 1, g1a, 12, false),
+      l('العضيات الخلوية', 'Cell organelles', 'الميتوكوندريا والبلاستيدات وباقي العضيات.', 'Mitochondria, chloroplasts and the rest.', 1, g1a, 28, true),
+      l('الانقسام المتساوي', 'Mitosis', 'أطوار الانقسام المتساوي خطوة بخطوة.', 'The phases of mitosis step by step.', 1, g1b, 25, true),
+      l('الانقسام الاختزالي', 'Meiosis', 'الفرق بين الانقسامين وتكوين الأمشاج.', 'Meiosis and gamete formation.', 1, g1b, 30, true),
+      l('مقدمة: الجهاز الهضمي', 'Intro: Digestive system', 'رحلة الطعام داخل الجسم.', 'The journey of food through the body.', 2, g2a, 15, false),
+      l('الإنزيمات الهاضمة', 'Digestive enzymes', 'الأميليز والبيبسين والليباز.', 'Amylase, pepsin and lipase.', 2, g2a, 26, true),
+      l('القلب والأوعية الدموية', 'Heart & blood vessels', 'تركيب القلب ومسار الدم.', 'Heart structure and blood flow.', 2, g2b, 32, true),
+      l('الدورة الدموية المزدوجة', 'Double circulation', 'الدورة الرئوية والجهازية.', 'Pulmonary and systemic circulation.', 2, g2b, 24, true),
+      l('مقدمة: الوراثة', 'Intro: Genetics', 'قوانين مندل الأساسية.', 'Mendel\'s basic laws.', 3, g3a, 14, false),
+      l('تركيب DNA وتضاعفه', 'DNA structure & replication', 'من الحلزون المزدوج إلى التضاعف.', 'From the double helix to replication.', 3, g3a, 38, true),
+      l('هرمونات البنكرياس', 'Pancreatic hormones', 'الإنسولين والجلوكاجون.', 'Insulin and glucagon.', 3, g3b, 22, true),
+    ]);
+  }
+
+  static void _subscriptions(AppState s, DateTime now) {
+    // Adam (s1): active for ~20 more days. Jana (s11): expired last week.
+    s.subscriptions.addAll([
+      Subscription(
+          studentId: 's1',
+          planId: 'monthly',
+          start: now.subtract(const Duration(days: 10)),
+          end: now.add(const Duration(days: 20)),
+          source: SubSource.payment),
+      Subscription(
+          studentId: 's11',
+          planId: 'monthly',
+          start: now.subtract(const Duration(days: 37)),
+          end: now.subtract(const Duration(days: 7)),
+          source: SubSource.code),
+    ]);
+    s.codes.addAll([
+      ActivationCode(code: 'BIO1-TERM', planId: 'term', grade: 1, created: now.subtract(const Duration(days: 3))),
+      ActivationCode(code: 'BIO2-MNTH', planId: 'monthly', grade: 2, created: now.subtract(const Duration(days: 3))),
+      ActivationCode(code: 'BIO3-YEAR', planId: 'year', grade: 3, created: now.subtract(const Duration(days: 3))),
+      ActivationCode(code: 'USED-0001', planId: 'monthly', grade: 3, created: now.subtract(const Duration(days: 40)), usedBy: 's11', usedAt: now.subtract(const Duration(days: 37))),
+    ]);
   }
 }

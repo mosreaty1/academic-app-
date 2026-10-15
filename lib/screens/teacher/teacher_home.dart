@@ -6,12 +6,12 @@ import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../data/app_state.dart';
 import '../../models/models.dart';
-import '../common/announcements_screen.dart';
 import '../common/dashboard_widgets.dart';
-import '../common/materials_screen.dart';
+import '../common/lessons_screen.dart';
 import '../common/store_screen.dart';
 import '../common/tickets_screen.dart';
 import 'students_screen.dart';
+import 'teacher_subscriptions.dart';
 import 'teacher_exams.dart';
 
 class TeacherHome extends StatelessWidget {
@@ -91,10 +91,10 @@ class TeacherHome extends StatelessWidget {
                   QuickAction(Icons.add_task_rounded, AppColors.violet, 'امتحان جديد', 'New exam',
                       () => go(context, const CreateExamScreen())),
                   QuickAction(Icons.assignment_add, AppColors.amber, 'واجب جديد', 'Homework', () => onTab(3)),
-                  QuickAction(Icons.upload_file_rounded, AppColors.primary, 'رفع مادة', 'Materials',
-                      () => go(context, const MaterialsScreen())),
-                  QuickAction(Icons.campaign_rounded, AppColors.sky, 'إعلان', 'Announce',
-                      () => go(context, const AnnouncementsScreen())),
+                  QuickAction(Icons.play_circle_rounded, AppColors.primary, 'الدروس', 'Lessons',
+                      () => go(context, const LessonsScreen())),
+                  QuickAction(Icons.workspace_premium_rounded, AppColors.amber, 'الاشتراكات', 'Subscriptions',
+                      () => go(context, const TeacherSubscriptionsScreen())),
                   QuickAction(Icons.storefront_rounded, AppColors.rose, 'المتجر', 'Store',
                       () => go(context, const StoreScreen())),
                   QuickAction(Icons.support_agent_rounded, AppColors.coral, 'التذاكر', 'Tickets',

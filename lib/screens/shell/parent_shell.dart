@@ -9,6 +9,7 @@ import '../common/exams_screen.dart';
 import '../common/homework_screen.dart';
 import '../common/more_screen.dart';
 import '../common/store_screen.dart';
+import '../common/subscription_screen.dart';
 import '../common/tickets_screen.dart';
 import '../parent/parent_home.dart';
 
@@ -31,6 +32,8 @@ class _ParentShellState extends State<ParentShell> {
       ChildPage(buildAttendancePage),
       const StoreScreen(),
       MoreScreen(entries: [
+        MenuEntry(Icons.workspace_premium_rounded, AppColors.amber, 'اشتراك الابن', 'Subscription',
+            () => SubscriptionScreen(studentId: s.activeStudentId)),
         MenuEntry(Icons.quiz_rounded, AppColors.violet, 'امتحانات الابن', 'Exams & results',
             () => ExamsScreen(studentId: s.activeStudentId)),
         MenuEntry(Icons.assignment_rounded, AppColors.amber, 'الواجبات', 'Homework',
