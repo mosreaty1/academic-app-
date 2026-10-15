@@ -6,6 +6,7 @@ import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../data/app_state.dart';
 import '../../models/models.dart';
+import 'question_bank_screen.dart';
 
 enum _HwState { pending, overdue, submitted, graded }
 
@@ -78,16 +79,26 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
               _seg(context, 1, context.tr('المسلّمة (${done.length})', 'Done (${done.length})')),
             ]),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           if (list.isEmpty)
             EmptyState(
                 _tab == 0 ? Icons.celebration_rounded : Icons.inbox_rounded,
                 _tab == 0
                     ? context.tr('لا توجد واجبات مطلوبة!', 'No homework due!')
-                    : context.tr('لم يتم تسليم أي واجب بعد', 'Nothing submitted yet')),
+                    : context.tr('لم يتم تسليم أي واجب بعد', 'Nothing submitted yet'),
+                subtitle: _tab == 0
+                    ? context.tr('أنت منجز كل شيء. استغل الوقت في التدرب على بنك الأسئلة.',
+                        'You are all caught up. Use the time to practise with the question bank.')
+                    : context.tr('عندما تسلّم واجباً سيظهر هنا مع درجته وتعليق المعلمة.',
+                        'Once you hand one in, it shows up here with the mark and feedback.'),
+                actionLabel: isStudent && _tab == 0
+                    ? context.tr('تدرّب الآن', 'Practise now')
+                    : null,
+                onAction: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const QuestionBankScreen()))),
           for (final h in list)
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 12),
               child: _HwCard(hw: h, studentId: widget.studentId),
             ),
         ],
@@ -102,7 +113,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
         onTap: () => setState(() => _tab = i),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 11),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
               color: sel ? context.cs.primary : Colors.transparent,
               borderRadius: BorderRadius.circular(12)),
@@ -135,18 +146,18 @@ class _HwCard extends StatelessWidget {
       child: Row(
         children: [
           IconBadge(Icons.assignment_rounded, color),
-          const SizedBox(width: 14),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(hw.title.of(context),
                     style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15)),
-                const SizedBox(height: 3),
+                        fontWeight: FontWeight.w700, fontSize: 14)),
+                const SizedBox(height: 4),
                 Text(hw.chapter.of(context),
                     style: TextStyle(color: context.muted, fontSize: 12)),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Row(children: [
                   Icon(Icons.event_rounded, size: 14, color: context.muted),
                   const SizedBox(width: 4),
@@ -165,7 +176,7 @@ class _HwCard extends StatelessWidget {
             children: [
               Pill(_stateLabel(context, state), color),
               if (sub?.mark != null) ...[
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Text('${sub!.mark}/${hw.maxMarks}',
                     style: TextStyle(
                         fontWeight: FontWeight.w700, color: color)),
@@ -209,19 +220,19 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(hw.title.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 6),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 8),
         Wrap(spacing: 8, children: [
           Pill(hw.chapter.of(context), AppColors.primary),
           Pill('${context.tr('الموعد', 'Due')} ${fmtDate(context, hw.due)}', AppColors.amber),
           Pill('${hw.maxMarks} ${context.tr('درجة', 'marks')}', AppColors.violet),
         ]),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         Text(hw.description.of(context), style: const TextStyle(height: 1.6)),
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         if (sub != null) ...[
           Container(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
                 color: context.brandSoft,
                 borderRadius: BorderRadius.circular(16)),
@@ -233,7 +244,7 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
                         'Submitted ${timeAgo(context, sub.at)}'),
                     style: TextStyle(
                         color: context.brand, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Text(sub.text),
                 if (sub.mark != null) ...[
                   const Divider(height: 22),
@@ -241,7 +252,7 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
                       context.tr('الدرجة: ${sub.mark}/${hw.maxMarks}',
                           'Mark: ${sub.mark}/${hw.maxMarks}'),
                       style: const TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 16)),
+                          fontWeight: FontWeight.w700, fontSize: 18)),
                   if (sub.feedback.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(sub.feedback),
@@ -277,7 +288,7 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
           decoration: InputDecoration(
               hintText: context.tr('اكتب إجابتك أو ملاحظاتك...', 'Type your answer or notes...')),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         OutlinedButton.icon(
           onPressed: () => setState(() => _attached = !_attached),
           icon: Icon(_attached ? Icons.check_circle_rounded : Icons.attach_file_rounded),
@@ -285,7 +296,7 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
               ? context.tr('تم إرفاق صورة الحل', 'Solution photo attached')
               : context.tr('إرفاق صورة / ملف', 'Attach photo / file')),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         FilledButton(
           onPressed: () {
             final t = _text.text.trim();
@@ -295,11 +306,19 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
             }
             final body = [
               if (t.isNotEmpty) t,
-              if (_attached) context.tr('صورة مرفقة','Photo attached'),
+              if (_attached) context.tr('صورة مرفقة', 'Photo attached'),
             ].join('\n');
             s.submitHomework(widget.hw.id, widget.studentId, body);
-            Navigator.pop(context);
-            toast(context, context.tr('تم تسليم الواجب','Homework submitted'));
+            final nav = Navigator.of(context);
+            nav.pop();
+            showSuccess(
+              nav.context,
+              title: context.tr('تم تسليم الواجب', 'Homework handed in'),
+              message: context.tr('عمل رائع! ستصحح د. راشيا واجبك وستصلك الدرجة هنا.',
+                  'Nice work! Dr. Rashia will grade it and the mark will show up here.'),
+              ctaLabel: context.tr('تمام', 'Got it'),
+              confetti: false,
+            );
           },
           child: Text(resubmit
               ? context.tr('إعادة التسليم', 'Resubmit')

@@ -65,9 +65,9 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
                 label: (g) => gradeTiny(context, g),
                 onChanged: (g) => setState(() => _grade = g),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               AppCard(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Row(children: [
                   IconButton(
                       onPressed: () => _shift(-1),
@@ -86,7 +86,7 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
                       icon: const Icon(Icons.chevron_right_rounded)),
                 ]),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Row(children: [
                 _mini(context, p, AttStatus.present),
                 _mini(context, a, AttStatus.absent),
@@ -107,7 +107,7 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
                       child: Column(children: [
                         Row(children: [
                           Avatar(st.name.initialOf(context), st.color, radius: 18),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Text(st.name.of(context),
                                 style: const TextStyle(fontWeight: FontWeight.w700)),
@@ -115,12 +115,12 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
                           Text(st.section,
                               style: TextStyle(color: context.muted, fontSize: 12)),
                         ]),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         Row(children: [
                           for (final t in AttStatus.values)
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 2),
+                                padding: const EdgeInsets.symmetric(horizontal: 4),
                                 child: _StatusBtn(
                                   status: t,
                                   selected: s.attendanceOn(st.id, _date) == t,
@@ -138,7 +138,7 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
           SafeArea(
             top: false,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
               decoration: BoxDecoration(
                   color: context.card,
                   border: Border(top: BorderSide(color: context.line))),
@@ -155,7 +155,7 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
                     child: Text(context.tr('الباقي حاضر', 'Rest present')),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 12),
                 Expanded(
                   child: FilledButton(
                     onPressed: () {
@@ -182,7 +182,7 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
   Widget _mini(BuildContext context, int n, AttStatus t) {
     return Expanded(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 3),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           color: attColor(t).withValues(alpha: 0.13),
@@ -191,9 +191,9 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
         child: Column(children: [
           Text('$n',
               style: TextStyle(
-                  fontWeight: FontWeight.w700, fontSize: 17, color: attColor(t))),
+                  fontWeight: FontWeight.w700, fontSize: 18, color: attColor(t))),
           Text(attLabel(context, t),
-              style: TextStyle(fontSize: 10.5, color: attColor(t))),
+              style: TextStyle(fontSize: 12, color: attColor(t))),
         ]),
       ),
     );
@@ -214,7 +214,7 @@ class _StatusBtn extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 160),
-        padding: const EdgeInsets.symmetric(vertical: 9),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: selected ? c : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
@@ -223,7 +223,7 @@ class _StatusBtn extends StatelessWidget {
         child: Center(
           child: Text(attLabel(context, status),
               style: TextStyle(
-                  fontSize: 11.5,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: selected ? Colors.white : context.muted)),
         ),

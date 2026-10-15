@@ -56,7 +56,7 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
             )
           : null,
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 92),
         children: [
           if (!teacher)
             AppCard(
@@ -70,7 +70,7 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
                       style: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w700)),
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,27 +108,27 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
                 context.tr('لا توجد مواد', 'No materials found')),
           for (final m in list)
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 12),
               child: AppCard(
                 onTap: () => showSheet(context, (_) => _MaterialSheet(m: m)),
                 child: Row(children: [
                   IconBadge(materialIcon(m.kind), materialColor(m.kind), size: 48),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(m.title.of(context),
                             style: const TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 15)),
-                        const SizedBox(height: 3),
+                                fontWeight: FontWeight.w700, fontSize: 14)),
+                        const SizedBox(height: 4),
                         Text(
                             '${m.chapter.of(context)} • ${metaLabel(context, m.meta)}',
                             style: TextStyle(color: context.muted, fontSize: 12)),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 4),
                         Text(
                             '${gradeShort(context, m.grade)} • ${fmtDate(context, m.added)}',
-                            style: TextStyle(color: context.muted, fontSize: 11.5)),
+                            style: TextStyle(color: context.muted, fontSize: 12)),
                       ],
                     ),
                   ),
@@ -176,16 +176,16 @@ class _MaterialSheet extends StatelessWidget {
           ),
           child: Icon(materialIcon(m.kind), size: 64, color: Colors.white),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         Text(m.title.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
         const SizedBox(height: 8),
-        Wrap(spacing: 8, runSpacing: 6, children: [
+        Wrap(spacing: 8, runSpacing: 8, children: [
           Pill(materialKindLabel(context, m.kind), color),
           Pill(m.chapter.of(context), AppColors.primary),
           Pill(metaLabel(context, m.meta), AppColors.sky),
         ]),
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         FilledButton.icon(
           onPressed: () {
             Navigator.pop(context);
@@ -202,7 +202,7 @@ class _MaterialSheet extends StatelessWidget {
               ? context.tr('تشغيل', 'Play')
               : context.tr('فتح', 'Open')),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         Row(children: [
           Expanded(
             child: OutlinedButton.icon(
@@ -214,7 +214,7 @@ class _MaterialSheet extends StatelessWidget {
             ),
           ),
           if (!teacher) ...[
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Expanded(
               child: OutlinedButton.icon(
                 onPressed: () => s.toggleStudied(m.id),
@@ -262,8 +262,8 @@ class _AddMaterialFormState extends State<_AddMaterialForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('رفع مادة تعليمية', 'Upload study material'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 14),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 16),
         LabeledField(context.tr('العنوان', 'Title'), _title),
         ChipSelector<int>(
           values: const [1, 2, 3],
@@ -271,7 +271,7 @@ class _AddMaterialFormState extends State<_AddMaterialForm> {
           label: (g) => gradeShort(context, g),
           onChanged: (g) => setState(() => _grade = g),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         if (chapters.isNotEmpty)
           ChipSelector<String>(
             values: chapters.map((c) => c.en).toList(),
@@ -280,14 +280,14 @@ class _AddMaterialFormState extends State<_AddMaterialForm> {
             onChanged: (en) =>
                 setState(() => _chapter = chapters.firstWhere((c) => c.en == en)),
           ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         ChipSelector<MaterialKind>(
           values: MaterialKind.values,
           selected: _kind,
           label: (k) => materialKindLabel(context, k),
           onChanged: (k) => setState(() => _kind = k),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         OutlinedButton.icon(
           onPressed: () => setState(() => _picked = !_picked),
           icon: Icon(_picked ? Icons.check_circle_rounded : Icons.attach_file_rounded),

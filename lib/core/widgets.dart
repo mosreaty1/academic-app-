@@ -132,7 +132,7 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(2, 26, 2, 12),
+      padding: const EdgeInsets.fromLTRB(4, 28, 4, 12),
       child: Row(
         children: [
           Expanded(
@@ -145,12 +145,12 @@ class SectionHeader extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               onTap: onAction,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Text(action!,
                     style: TextStyle(
                         color: context.brand,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13)),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14)),
               ),
             ),
         ],
@@ -200,7 +200,7 @@ class Pill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: context.isDark ? 0.22 : 0.11),
         borderRadius: BorderRadius.circular(8),
@@ -214,7 +214,7 @@ class Pill extends StatelessWidget {
           ],
           Text(label,
               style: TextStyle(
-                  color: color, fontSize: 11.5, fontWeight: FontWeight.w600)),
+                  color: color, fontSize: 12, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -254,7 +254,10 @@ class EmptyState extends StatelessWidget {
   final IconData icon;
   final String title;
   final String? subtitle;
-  const EmptyState(this.icon, this.title, {super.key, this.subtitle});
+  final String? actionLabel;
+  final VoidCallback? onAction;
+  const EmptyState(this.icon, this.title,
+      {super.key, this.subtitle, this.actionLabel, this.onAction});
 
   @override
   Widget build(BuildContext context) {
@@ -265,11 +268,11 @@ class EmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 84,
-              height: 84,
+              width: 88,
+              height: 88,
               decoration: BoxDecoration(
                   color: context.brandSoft, shape: BoxShape.circle),
-              child: Icon(icon, size: 38, color: context.brand),
+              child: Icon(icon, size: 40, color: context.brand),
             ),
             const SizedBox(height: 16),
             Text(title,
@@ -277,10 +280,19 @@ class EmptyState extends StatelessWidget {
                 style: context.theme.textTheme.titleMedium
                     ?.copyWith(fontWeight: FontWeight.w700)),
             if (subtitle != null) ...[
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
               Text(subtitle!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: context.muted)),
+                  style: TextStyle(color: context.muted, height: 1.5)),
+            ],
+            if (actionLabel != null) ...[
+              const SizedBox(height: 24),
+              FilledButton(
+                style: FilledButton.styleFrom(
+                    minimumSize: const Size(160, 48)),
+                onPressed: onAction,
+                child: Text(actionLabel!),
+              ),
             ],
           ],
         ),
@@ -478,21 +490,21 @@ class HeroStat extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             onTap: onTap,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 6),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
               child: Column(children: [
                 Text(value,
                     style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 22,
+                        fontSize: 28,
                         fontWeight: FontWeight.w700,
                         fontFeatures: [FontFeature.tabularFigures()])),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(label,
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.82), fontSize: 11.5)),
+                        color: Colors.white.withValues(alpha: 0.82), fontSize: 12)),
               ]),
             ),
           ),
@@ -542,7 +554,7 @@ class StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       onTap: onTap,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -550,13 +562,13 @@ class StatCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(value,
               style: const TextStyle(
-                  fontSize: 21,
+                  fontSize: 18,
                   fontWeight: FontWeight.w700,
                   fontFeatures: [FontFeature.tabularFigures()])),
           Text(label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: context.muted, fontSize: 12.5)),
+              style: TextStyle(color: context.muted, fontSize: 12)),
         ],
       ),
     );
@@ -591,8 +603,8 @@ class ChipSelector<T> extends StatelessWidget {
                 showCheckmark: false,
                 onSelected: (_) => onChanged(v),
                 labelStyle: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
                   color: v == selected ? Colors.white : context.ink,
                 ),
                 selectedColor: context.cs.primary,
@@ -647,13 +659,13 @@ class LabeledField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label,
-              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-          const SizedBox(height: 6),
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+          const SizedBox(height: 8),
           TextField(
             controller: controller,
             maxLines: maxLines,
@@ -665,6 +677,233 @@ class LabeledField extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// One-shot confetti burst. Wrap a screen in a [Stack] and add this on top.
+class Confetti extends StatefulWidget {
+  const Confetti({super.key});
+
+  @override
+  State<Confetti> createState() => _ConfettiState();
+}
+
+class _ConfettiState extends State<Confetti> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 2600))
+    ..forward();
+  late final List<_Piece> _pieces;
+
+  @override
+  void initState() {
+    super.initState();
+    final r = math.Random(7);
+    const palette = [
+      AppColors.leaf,
+      AppColors.gold,
+      AppColors.sky,
+      AppColors.coral,
+      AppColors.primary,
+      Color(0xFFFFFFFF),
+    ];
+    _pieces = List.generate(
+        44,
+        (i) => _Piece(
+              x: 0.5 + (r.nextDouble() - 0.5) * 0.2,
+              vx: (r.nextDouble() - 0.5) * 1.5,
+              vy: -(0.6 + r.nextDouble() * 0.9),
+              size: 5 + r.nextDouble() * 6,
+              spin: r.nextDouble() * 8,
+              color: palette[i % palette.length],
+              round: r.nextBool(),
+            ));
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: AnimatedBuilder(
+        animation: _c,
+        builder: (_, __) => CustomPaint(
+          size: Size.infinite,
+          painter: _ConfettiPainter(_pieces, _c.value),
+        ),
+      ),
+    );
+  }
+}
+
+class _Piece {
+  final double x, vx, vy, size, spin;
+  final Color color;
+  final bool round;
+  _Piece(
+      {required this.x,
+      required this.vx,
+      required this.vy,
+      required this.size,
+      required this.spin,
+      required this.color,
+      required this.round});
+}
+
+class _ConfettiPainter extends CustomPainter {
+  final List<_Piece> pieces;
+  final double t;
+  _ConfettiPainter(this.pieces, this.t);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final fade = t < 0.75 ? 1.0 : (1 - t) / 0.25;
+    for (final p in pieces) {
+      final dx = size.width * (p.x + p.vx * t * 0.6);
+      final dy = size.height * (0.32 + p.vy * t * 0.5 + 0.9 * t * t);
+      final paint = Paint()..color = p.color.withValues(alpha: fade.clamp(0, 1));
+      canvas.save();
+      canvas.translate(dx, dy);
+      canvas.rotate(p.spin * t);
+      if (p.round) {
+        canvas.drawCircle(Offset.zero, p.size / 2, paint);
+      } else {
+        canvas.drawRRect(
+            RRect.fromRectAndRadius(
+                Rect.fromCenter(center: Offset.zero, width: p.size, height: p.size * 0.5),
+                const Radius.circular(2)),
+            paint);
+      }
+      canvas.restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_ConfettiPainter o) => o.t != t;
+}
+
+/// Celebration dialog: bouncing check, confetti, a warm message and one clear
+/// next step.
+Future<void> showSuccess(BuildContext context,
+    {required String title,
+    required String message,
+    String? ctaLabel,
+    VoidCallback? onCta,
+    bool confetti = true}) {
+  return showDialog<void>(
+    context: context,
+    builder: (ctx) => Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(24),
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+            decoration: BoxDecoration(
+              color: ctx.card,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: 1),
+                  duration: const Duration(milliseconds: 700),
+                  curve: Curves.elasticOut,
+                  builder: (_, v, c) => Transform.scale(scale: v, child: c),
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: AppColors.leaf.withValues(alpha: 0.14),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                            color: AppColors.leaf.withValues(alpha: 0.30),
+                            blurRadius: 24,
+                            spreadRadius: 2),
+                      ],
+                    ),
+                    child: const Icon(Icons.check_rounded,
+                        color: AppColors.leaf, size: 44),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 8),
+                Text(message,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: ctx.muted, height: 1.5)),
+                const SizedBox(height: 24),
+                FilledButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    onCta?.call();
+                  },
+                  child: Text(ctaLabel ?? ctx.tr('متابعة', 'Continue')),
+                ),
+              ],
+            ),
+          ),
+          if (confetti) const Positioned.fill(child: Confetti()),
+        ],
+      ),
+    ),
+  );
+}
+
+/// Recent + popular search chips shown under an empty search field.
+class SearchSuggestions extends StatelessWidget {
+  final List<String> recent;
+  final List<String> popular;
+  final ValueChanged<String> onPick;
+  const SearchSuggestions(
+      {super.key, required this.recent, required this.popular, required this.onPick});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget group(String label, IconData icon, List<String> items) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              Icon(icon, size: 16, color: context.muted),
+              const SizedBox(width: 4),
+              Text(label, style: TextStyle(fontSize: 12, color: context.muted)),
+            ]),
+            const SizedBox(height: 8),
+            Wrap(spacing: 8, runSpacing: 8, children: [
+              for (final s in items)
+                ActionChip(
+                  label: Text(s, style: const TextStyle(fontSize: 12)),
+                  onPressed: () => onPick(s),
+                  backgroundColor: context.card,
+                  side: BorderSide(color: context.line),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+            ]),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (recent.isNotEmpty)
+          group(context.tr('عمليات بحث سابقة', 'Recent'), Icons.history_rounded, recent),
+        group(context.tr('الأكثر بحثاً', 'Popular'), Icons.trending_up_rounded, popular),
+      ],
     );
   }
 }

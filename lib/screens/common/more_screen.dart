@@ -47,7 +47,7 @@ class MoreScreen extends StatelessWidget {
             border: false,
             child: Row(children: [
               Avatar(me.name.initialOf(context), Colors.white.withValues(alpha: 0.25), radius: 28),
-              const SizedBox(width: 14),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +57,7 @@ class MoreScreen extends StatelessWidget {
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
                     Text(subtitle,
                         style: TextStyle(color: Colors.white.withValues(alpha: 0.85))),
                     if (me.phone.isNotEmpty)
@@ -82,14 +82,14 @@ class MoreScreen extends StatelessWidget {
                     trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                       if (entries[i].badge > 0)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                               color: AppColors.coral,
                               borderRadius: BorderRadius.circular(10)),
                           child: Text('${entries[i].badge}',
                               style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 11,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w700)),
                         ),
                       const Icon(Icons.chevron_right_rounded),
@@ -137,7 +137,7 @@ class MoreScreen extends StatelessWidget {
               ),
             ]),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           Center(
             child: Text(
                 context.tr('أكاديمية د. راشيا للأحياء • الإصدار 1.0', 'Dr. Rashia Biology Academy • v1.0'),

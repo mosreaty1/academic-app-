@@ -36,7 +36,7 @@ class StudentIdCard extends StatelessWidget {
         child: CustomPaint(
           painter: BioPatternPainter(Colors.white),
           child: Padding(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -49,7 +49,7 @@ class StudentIdCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(9)),
                     child: const Icon(Icons.biotech_rounded, color: Colors.white, size: 18),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,18 +60,18 @@ class StudentIdCard extends StatelessWidget {
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
-                                fontSize: 13)),
+                                fontSize: 14)),
                         Text(context.tr('بطاقة الطالب', 'STUDENT CARD'),
                             style: TextStyle(
                                 color: Colors.white.withValues(alpha: 0.65),
-                                fontSize: 10,
+                                fontSize: 12,
                                 letterSpacing: 1.2)),
                       ],
                     ),
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: on ? AppColors.gold : Colors.white.withValues(alpha: 0.16),
                       borderRadius: BorderRadius.circular(8),
@@ -83,16 +83,16 @@ class StudentIdCard extends StatelessWidget {
                       Text(on ? context.tr('مشترك', 'Premium') : context.tr('مجاني', 'Free'),
                           style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 11,
+                              fontSize: 12,
                               fontWeight: FontWeight.w700)),
                     ]),
                   ),
                 ]),
-                const SizedBox(height: 22),
+                const SizedBox(height: 24),
                 Row(children: [
                   Avatar(student.name.initialOf(context), Colors.white.withValues(alpha: 0.22),
                       radius: 26),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,18 +101,18 @@ class StudentIdCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 19, fontWeight: FontWeight.w700)),
-                        const SizedBox(height: 2),
+                                color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 4),
                         Text('${gradeName(context, student.grade)} • ${student.section}',
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.78), fontSize: 12.5)),
+                                color: Colors.white.withValues(alpha: 0.78), fontSize: 12)),
                       ],
                     ),
                   ),
                 ]),
                 const SizedBox(height: 20),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.20),
                     borderRadius: BorderRadius.circular(14),
@@ -130,7 +130,7 @@ class StudentIdCard extends StatelessWidget {
                             end: Alignment.bottomRight),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,14 +138,14 @@ class StudentIdCard extends StatelessWidget {
                           Text(context.tr('كود الطالب', 'STUDENT ID'),
                               style: TextStyle(
                                   color: Colors.white.withValues(alpha: 0.6),
-                                  fontSize: 9.5,
+                                  fontSize: 12,
                                   letterSpacing: 1.2)),
                           Directionality(
                             textDirection: TextDirection.ltr,
                             child: Text(student.code,
                                 style: const TextStyle(
                                     color: Colors.white,
-                                    fontSize: 21,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 2)),
                           ),

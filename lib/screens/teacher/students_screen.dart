@@ -43,7 +43,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
         label: Text(context.tr('إضافة طالب', 'Add student')),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 92),
         children: [
           TextField(
             onChanged: (v) => setState(() => _q = v),
@@ -119,7 +119,7 @@ class _StudentSheet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         StudentIdCard(student: u),
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         OutlinedButton.icon(
           onPressed: () {
             Navigator.pop(context);
@@ -128,7 +128,7 @@ class _StudentSheet extends StatelessWidget {
           icon: const Icon(Icons.event_available_rounded),
           label: Text(context.tr('سجل الحضور', 'Attendance record')),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         OutlinedButton.icon(
           onPressed: () {
             Navigator.pop(context);
@@ -211,11 +211,11 @@ class _AddStudentFormState extends State<_AddStudentForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إضافة طالب جديد', 'Add a new student'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
         const SizedBox(height: 4),
         Text(context.tr('سيتم إنشاء كود الطالب وكلمة المرور تلقائياً', 'The Student ID and password are generated automatically'),
-            style: TextStyle(color: context.muted, fontSize: 12.5)),
-        const SizedBox(height: 14),
+            style: TextStyle(color: context.muted, fontSize: 12)),
+        const SizedBox(height: 16),
         LabeledField(context.tr('اسم الطالب', 'Student name'), _name),
         LabeledField(context.tr('موبايل ولي الأمر (للربط)', 'Parent phone (to link)'), _phone,
             keyboard: TextInputType.phone),
@@ -225,7 +225,7 @@ class _AddStudentFormState extends State<_AddStudentForm> {
           label: (g) => gradeTiny(context, g),
           onChanged: (g) => setState(() => _grade = g),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         ChipSelector<String>(
           values: const ['A', 'B', 'C'],
           selected: _section,
@@ -234,7 +234,7 @@ class _AddStudentFormState extends State<_AddStudentForm> {
         ),
         if (_error != null)
           Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 12),
             child: Text(_error!,
                 style: const TextStyle(color: AppColors.coral, fontWeight: FontWeight.w700)),
           ),
@@ -265,17 +265,17 @@ class _CredentialsDialog extends StatelessWidget {
         'Dr. Rashia Academy\nStudent: ${student.name.en}\nStudent ID: ${student.code}\nPassword: $password');
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
-      title: Text(context.tr('تم إنشاء الحساب','Account created'),
+      title: Text(context.tr('تم إنشاء الحساب', 'Account created'),
           style: const TextStyle(fontWeight: FontWeight.w700)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(student.name.of(context), style: const TextStyle(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           _row(context, context.tr('كود الطالب', 'Student ID'), student.code),
           _row(context, context.tr('كلمة المرور', 'Password'), password),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
               context.tr('احتفظ بكلمة المرور الآن، لن تظهر مرة أخرى.', 'Save the password now - it will not be shown again.'),
               style: TextStyle(color: context.muted, fontSize: 12)),
@@ -300,7 +300,7 @@ class _CredentialsDialog extends StatelessWidget {
   }
 
   Widget _row(BuildContext context, String k, String v) => Padding(
-        padding: const EdgeInsets.only(bottom: 6),
+        padding: const EdgeInsets.only(bottom: 8),
         child: Row(children: [
           Text('$k: ', style: TextStyle(color: context.muted)),
           Directionality(

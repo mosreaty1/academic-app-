@@ -92,19 +92,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Icon(Icons.biotech_rounded,
                       color: AppColors.primary, size: 34),
                 ),
-                const SizedBox(height: 18),
-                Text(context.tr('أهلاً بك','Welcome'),
+                const SizedBox(height: 20),
+                Text(context.tr('أهلاً بك', 'Welcome'),
                     style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 30,
+                        fontSize: 28,
                         fontWeight: FontWeight.w700)),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Text(
                     context.tr('سجّل الدخول إلى أكاديمية د. راشيا للأحياء',
                         'Sign in to Dr. Rashia Biology Academy'),
                     style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.85),
-                        fontSize: 15)),
+                        fontSize: 14)),
               ],
             ),
           ),
@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(context.tr('كود الطالب / رقم الموبايل', 'Student ID / phone number'),
                     style: const TextStyle(fontWeight: FontWeight.w700)),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 TextField(
                   controller: _id,
                   textDirection: TextDirection.ltr,
@@ -130,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 16),
                 Text(context.tr('كلمة المرور', 'Password'),
                     style: const TextStyle(fontWeight: FontWeight.w700)),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 TextField(
                   controller: _pass,
                   obscureText: _obscure,
@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Row(children: [
                       const Icon(Icons.error_outline_rounded,
                           color: AppColors.coral, size: 18),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 8),
                       Expanded(
                           child: Text(_error!,
                               style: const TextStyle(
@@ -170,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               strokeWidth: 2.5, color: Colors.white))
                       : Text(context.tr('تسجيل الدخول', 'Sign in')),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Center(
                   child: TextButton(
                     onPressed: () => toast(
@@ -180,10 +180,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(context.tr('نسيت كلمة المرور؟', 'Forgot password?')),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 if (!s.isCloud) ...[
                   Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                         color: context.brandSoft,
                         borderRadius: BorderRadius.circular(16)),
@@ -197,10 +197,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                                 context.tr('وضع تجريبي (Firebase غير مفعّل). اختر حساباً للتجربة، كلمة المرور ${Seed.demoPassword}',
                                     'Demo mode (Firebase not connected). Tap an account; password is ${Seed.demoPassword}'),
-                                style: const TextStyle(fontSize: 12.5, height: 1.5)),
+                                style: const TextStyle(fontSize: 12, height: 1.5)),
                           ),
                         ]),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         Wrap(spacing: 8, runSpacing: 8, children: [
                           for (final d in Seed.demoLogins)
                             ActionChip(

@@ -56,11 +56,11 @@ class _ExamList extends StatelessWidget {
     final s = context.watch<AppState>();
     final exams = [...s.exams]..sort((a, b) => b.date.compareTo(a.date));
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 90),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 92),
       children: [
         for (final e in exams)
           Padding(
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 12),
             child: Builder(builder: (_) {
               final atts = s.attemptsOfExam(e.id);
               final ungraded = atts.where((a) => !a.graded).length;
@@ -69,18 +69,18 @@ class _ExamList extends StatelessWidget {
                 onTap: () => go(context, ExamDetailScreen(examId: e.id)),
                 child: Row(children: [
                   IconBadge(Icons.assignment_rounded, AppColors.violet),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(e.title.of(context),
-                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                        const SizedBox(height: 3),
+                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                        const SizedBox(height: 4),
                         Text(
                             '${gradeShort(context, e.grade)} • ${fmtDate(context, e.date)} • ${e.questionIds.length} ${context.tr('سؤال', 'Q')} • ${s.examTotal(e)} ${context.tr('درجة', 'marks')}',
                             style: TextStyle(color: context.muted, fontSize: 12)),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 4),
                         Text(
                             context.tr('سلّم ${atts.length} من $roster', '${atts.length} of $roster submitted'),
                             style: TextStyle(color: context.muted, fontSize: 12)),
@@ -131,7 +131,7 @@ class ExamDetailScreen extends StatelessWidget {
                 label: context.tr('سلّموا', 'Submitted'),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Expanded(
               child: StatCard(
                 icon: Icons.bar_chart_rounded,
@@ -140,7 +140,7 @@ class ExamDetailScreen extends StatelessWidget {
                 label: context.tr('المتوسط', 'Average'),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Expanded(
               child: StatCard(
                 icon: Icons.pending_actions_rounded,
@@ -157,7 +157,7 @@ class ExamDetailScreen extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: AppCard(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   onTap: a == null ? null : () => showSheet(context, (_) => GradeAttemptSheet(attempt: a)),
                   child: Row(children: [
                     Avatar(st.name.initialOf(context), st.color, radius: 18),
@@ -215,9 +215,9 @@ class _GradeAttemptSheetState extends State<GradeAttemptSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(st.name.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
         Text(e.title.of(context), style: TextStyle(color: context.muted)),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         Row(children: [
           Pill('MCQ: ${a.mcqScore}', AppColors.sky),
           const SizedBox(width: 8),
@@ -245,7 +245,7 @@ class _GradeAttemptSheetState extends State<GradeAttemptSheet> {
           const SizedBox(height: 8),
           Text(
               '${context.tr('النموذجية', 'Model')}: ${q.modelAnswer.of(context)}',
-              style: TextStyle(color: context.muted, fontSize: 12.5, height: 1.5)),
+              style: TextStyle(color: context.muted, fontSize: 12, height: 1.5)),
           const SizedBox(height: 8),
           Row(children: [
             Text(context.tr('الدرجة (من ${q.marks})', 'Mark (out of ${q.marks})'),
@@ -258,13 +258,13 @@ class _GradeAttemptSheetState extends State<GradeAttemptSheet> {
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 10)),
+                    contentPadding: EdgeInsets.symmetric(vertical: 12)),
               ),
             ),
           ]),
         ],
         if (written.isNotEmpty) ...[
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           FilledButton(
             onPressed: () {
               var sum = 0;
@@ -331,14 +331,14 @@ class _CreateExamScreenState extends State<CreateExamScreen> {
               _picked.clear();
             }),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           ChipSelector<ExamKind>(
             values: ExamKind.values,
             selected: _kind,
             label: (k) => examKindLabel(context, k),
             onChanged: (k) => setState(() => _kind = k),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Row(children: [
             Expanded(
               child: OutlinedButton.icon(
@@ -374,7 +374,7 @@ class _CreateExamScreenState extends State<CreateExamScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: AppCard(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 onTap: () => setState(() {
                   if (!_picked.remove(q.id)) _picked.add(q.id);
                 }),
@@ -392,11 +392,11 @@ class _CreateExamScreenState extends State<CreateExamScreen> {
                         Text(q.text.of(context),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5)),
+                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
                         const SizedBox(height: 4),
                         Text(
                             '${q.type == QType.mcq ? 'MCQ' : context.tr('مقالي', 'Written')} • ${difficultyLabel(context, q.difficulty)} • ${q.marks} ${context.tr('درجة', 'marks')}',
-                            style: TextStyle(color: context.muted, fontSize: 11.5)),
+                            style: TextStyle(color: context.muted, fontSize: 12)),
                       ],
                     ),
                   ),

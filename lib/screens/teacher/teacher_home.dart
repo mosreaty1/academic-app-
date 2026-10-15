@@ -42,7 +42,7 @@ class TeacherHome extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           HeroHeader(
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 26),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -55,18 +55,18 @@ class TeacherHome extends StatelessWidget {
                       children: [
                         Text(greeting(context),
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.85), fontSize: 13)),
+                                color: Colors.white.withValues(alpha: 0.85), fontSize: 14)),
                         Text(me.name.of(context),
                             style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 21,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w700)),
                       ],
                     ),
                   ),
                   const NotificationBell(),
                 ]),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 Row(children: [
                   _HeroStat('${students.length}', context.tr('طالب', 'Students'),
                       () => go(context, const StudentsScreen())),
@@ -110,7 +110,7 @@ class TeacherHome extends StatelessWidget {
                     child: Row(children: [
                       const IconBadge(Icons.verified_rounded, AppColors.leaf),
                       const SizedBox(width: 12),
-                      Expanded(child: Text(context.tr('كل شيء منجز',"You're all caught up"))),
+                      Expanded(child: Text(context.tr('كل شيء منجز', "You're all caught up"))),
                     ]),
                   ),
                 if (toGradeExams.isNotEmpty)
@@ -164,7 +164,7 @@ class _Attention extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: AppCard(
         onTap: onTap,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(children: [
           IconBadge(icon, color, size: 40),
           const SizedBox(width: 12),

@@ -7,7 +7,10 @@ import 'package:rashia_academy/core/theme.dart';
 import 'package:rashia_academy/data/app_state.dart';
 import 'package:rashia_academy/models/models.dart';
 import 'package:rashia_academy/screens/auth/login_screen.dart';
+import 'package:rashia_academy/screens/common/exams_screen.dart';
 import 'package:rashia_academy/screens/common/lessons_screen.dart';
+import 'package:rashia_academy/screens/common/question_bank_screen.dart';
+import 'package:rashia_academy/screens/student/student_home.dart';
 import 'package:rashia_academy/screens/common/more_screen.dart';
 import 'package:rashia_academy/screens/common/subscription_screen.dart';
 import 'package:rashia_academy/screens/teacher/students_screen.dart';
@@ -172,5 +175,42 @@ void main() {
     await t.tap(find.text('Redeem code'));
     await t.pumpAndSettle();
     expect(s.hasAccess('s7'), isTrue);
+  });
+
+  testWidgets('redeeming a code shows the celebration dialog', (t) async {
+    await host(t, 's7', const SubscriptionScreen(studentId: 's7'), ar: false);
+    await t.scrollUntilVisible(find.byType(TextField), 300, scrollable: find.byType(Scrollable).first);
+    await t.enterText(find.byType(TextField), 'BIO2-MNTH');
+    await t.scrollUntilVisible(find.text('Redeem code'), 300, scrollable: find.byType(Scrollable).first);
+    await t.tap(find.text('Redeem code'));
+    await t.pump(const Duration(milliseconds: 300));
+    await t.pump(const Duration(milliseconds: 900));
+    expect(find.text('You are subscribed'), findsOneWidget);
+    expect(find.text('Start learning'), findsOneWidget);
+    await t.pumpAndSettle(const Duration(seconds: 3));
+  });
+
+  testWidgets('practice answers get encouraging feedback', (t) async {
+    await host(t, 's1', const QuestionBankScreen(), ar: false);
+    await t.tap(find.text('Salivary amylase'));
+    await t.pump(const Duration(milliseconds: 600));
+    expect(find.text('Correct! Nice work, keep going.'), findsOneWidget);
+  });
+
+  testWidgets('a perfect exam gets the outstanding message', (t) async {
+    await host(t, 's7', const ExamResultScreen(examId: 'e21', studentId: 's7'), ar: false);
+    await t.pumpAndSettle(const Duration(seconds: 4));
+    expect(find.text('Outstanding!'), findsOneWidget);
+    expect(find.text('Practise similar questions'), findsOneWidget);
+  });
+
+  testWidgets('home shows a continue-learning card by student stage', (t) async {
+    await host(t, 's1', StudentHome(onTab: (_) {}), ar: false);
+    await t.pump(const Duration(milliseconds: 800));
+    expect(find.text('Pick up where you left off'), findsOneWidget);
+    await t.pumpWidget(const SizedBox());
+    await host(t, 's2', StudentHome(onTab: (_) {}), ar: false);
+    await t.pump(const Duration(milliseconds: 800));
+    expect(find.text('Start your next lesson'), findsOneWidget);
   });
 }

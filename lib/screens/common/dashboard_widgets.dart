@@ -40,13 +40,13 @@ class NotificationBell extends StatelessWidget {
             end: 4,
             top: 4,
             child: Container(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(4),
               decoration: const BoxDecoration(
                   color: AppColors.amber, shape: BoxShape.circle),
               child: Text('$n',
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700)),
             ),
           ),
@@ -74,9 +74,9 @@ class QuickActionGrid extends StatelessWidget {
       crossAxisCount: 4,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      childAspectRatio: 0.78,
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
+      childAspectRatio: 0.72,
       children: [
         for (var i = 0; i < actions.length; i++)
           Reveal(
@@ -102,7 +102,7 @@ class QuickActionGrid extends StatelessWidget {
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 11.5, fontWeight: FontWeight.w600, height: 1.25)),
+                              fontSize: 12, fontWeight: FontWeight.w700, height: 1.25)),
                     ],
                   ),
                 ),
@@ -137,7 +137,7 @@ class TodayClassesCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(context.tr('حصص اليوم', "Today's classes"),
-                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15.5)),
+                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
                   Text(fmtDateFull(context, now),
                       style: TextStyle(color: context.muted, fontSize: 12)),
                 ],
@@ -148,7 +148,7 @@ class TodayClassesCard extends StatelessWidget {
           if (slots.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(context.tr('لا توجد حصص اليوم','No classes today'),
+              child: Text(context.tr('لا توجد حصص اليوم', 'No classes today'),
                   style: TextStyle(color: context.muted)),
             ),
           for (final sl in slots)
@@ -165,12 +165,12 @@ class TodayClassesCard extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.w700, color: context.brand)),
                   Text('${sl.minutes} ${context.tr('د', 'min')}',
-                      style: TextStyle(color: context.muted, fontSize: 11)),
+                      style: TextStyle(color: context.muted, fontSize: 12)),
                 ]),
                 Container(
                     width: 1,
                     height: 34,
-                    margin: const EdgeInsets.symmetric(horizontal: 14),
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
                     color: context.line),
                 Expanded(
                   child: Column(
@@ -222,11 +222,11 @@ class AnnouncementPreview extends StatelessWidget {
                 children: [
                   Text(a.title.of(context),
                       style: const TextStyle(fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 4),
                   Text(a.body.of(context),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: context.muted, fontSize: 12.5, height: 1.4)),
+                      style: TextStyle(color: context.muted, fontSize: 12, height: 1.4)),
                 ],
               ),
             ),
@@ -293,7 +293,7 @@ class UpcomingList extends StatelessWidget {
       String sub, VoidCallback? onTap) {
     return AppCard(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(children: [
         IconBadge(icon, color, size: 40),
         const SizedBox(width: 12),

@@ -48,6 +48,20 @@ class _QuestionBankBodyState extends State<QuestionBankBody> {
   Difficulty? _diff;
   bool _onlySaved = false;
   String _query = '';
+  final _search = TextEditingController();
+  final List<String> _recent = [];
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  void _setQuery(String v) {
+    _search.text = v;
+    _search.selection = TextSelection.collapsed(offset: v.length);
+    setState(() => _query = v);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,15 +90,41 @@ class _QuestionBankBodyState extends State<QuestionBankBody> {
     }
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 92),
       children: [
         TextField(
+          controller: _search,
           onChanged: (v) => setState(() => _query = v),
+          onSubmitted: (v) {
+            final q = v.trim();
+            if (q.isNotEmpty) {
+              setState(() {
+                _recent.remove(q);
+                _recent.insert(0, q);
+                if (_recent.length > 4) _recent.removeLast();
+              });
+            }
+          },
           decoration: InputDecoration(
             hintText: context.tr('ابحث في الأسئلة...', 'Search questions...'),
             prefixIcon: const Icon(Icons.search_rounded),
+            suffixIcon: _query.isEmpty
+                ? null
+                : IconButton(
+                    icon: const Icon(Icons.close_rounded),
+                    onPressed: () => _setQuery('')),
           ),
         ),
+        if (_query.isEmpty)
+          SearchSuggestions(
+            recent: _recent,
+            popular: [
+              context.tr('الميتوكوندريا', 'mitochondria'),
+              context.tr('القلب', 'heart'),
+              context.tr('DNA', 'DNA'),
+            ],
+            onPick: _setQuery,
+          ),
         const SizedBox(height: 12),
         if (teacher) ...[
           ChipSelector<int?>(
@@ -149,13 +189,24 @@ class _QuestionBankBodyState extends State<QuestionBankBody> {
         Text(
             context.tr('${list.length} سؤال', '${list.length} questions'),
             style: TextStyle(color: context.muted, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         if (list.isEmpty)
           EmptyState(Icons.search_off_rounded,
-              context.tr('لا توجد أسئلة مطابقة', 'No matching questions')),
+              context.tr('لا توجد أسئلة مطابقة', 'No matching questions'),
+              subtitle: context.tr('جرّب كلمات أخرى أو أزل الفلاتر.', 'Try different words or clear the filters.'),
+              actionLabel: context.tr('مسح الفلاتر', 'Clear filters'),
+              onAction: () {
+                _setQuery('');
+                setState(() {
+                  _chapter = null;
+                  _type = null;
+                  _diff = null;
+                  _onlySaved = false;
+                });
+              }),
         for (final q in list)
           Padding(
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 12),
             child: QuestionCard(key: ValueKey(q.id), q: q, teacher: teacher),
           ),
       ],
@@ -189,9 +240,9 @@ class _QuestionCardState extends State<QuestionCard> {
         children: [
           Row(children: [
             Pill(gradeShort(context, q.grade), AppColors.primary),
-            const SizedBox(width: 6),
+            const SizedBox(width: 8),
             Pill(difficultyLabel(context, q.difficulty), difficultyColor(q.difficulty)),
-            const SizedBox(width: 6),
+            const SizedBox(width: 8),
             Pill(q.type == QType.mcq ? 'MCQ' : context.tr('مقالي', 'Written'), AppColors.sky),
             const Spacer(),
             if (!widget.teacher)
@@ -208,7 +259,7 @@ class _QuestionCardState extends State<QuestionCard> {
           const SizedBox(height: 8),
           Text(q.text.of(context),
               style: const TextStyle(
-                  fontWeight: FontWeight.w700, fontSize: 15.5, height: 1.5)),
+                  fontWeight: FontWeight.w700, fontSize: 14, height: 1.5)),
           const SizedBox(height: 12),
           if (q.type == QType.mcq)
             for (var i = 0; i < q.options.length; i++) _option(context, s, i)
@@ -231,9 +282,11 @@ class _QuestionCardState extends State<QuestionCard> {
                 ],
               ),
             ),
+          if (q.type == QType.mcq && _reveal && !widget.teacher)
+            _FeedbackBanner(correct: _picked == q.answer),
           if (q.type == QType.mcq && showAnswer && q.explanation.ar.isNotEmpty)
             Container(
-              margin: const EdgeInsets.only(top: 6),
+              margin: const EdgeInsets.only(top: 8),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                   color: context.brandSoft,
@@ -246,7 +299,7 @@ class _QuestionCardState extends State<QuestionCard> {
                   const SizedBox(width: 8),
                   Expanded(
                       child: Text(q.explanation.of(context),
-                          style: const TextStyle(fontSize: 13, height: 1.5))),
+                          style: const TextStyle(fontSize: 14, height: 1.5))),
                 ],
               ),
             ),
@@ -299,7 +352,7 @@ class _QuestionCardState extends State<QuestionCard> {
                 s.recordPractice(s.me!.id, q.id, i == q.answer);
               },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             color: bg,
             borderRadius: BorderRadius.circular(14),
@@ -312,11 +365,49 @@ class _QuestionCardState extends State<QuestionCard> {
             const SizedBox(width: 12),
             Expanded(
                 child: Text(q.options[i].of(context),
-                    style: const TextStyle(fontWeight: FontWeight.w600))),
+                    style: const TextStyle(fontWeight: FontWeight.w700))),
             if (icon != null)
               Icon(icon, color: isAnswer ? AppColors.leaf : AppColors.coral, size: 20),
           ]),
         ),
+      ),
+    );
+  }
+}
+
+/// Encouraging reaction after a practice answer (not just a green/red mark).
+class _FeedbackBanner extends StatelessWidget {
+  final bool correct;
+  const _FeedbackBanner({required this.correct});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = correct ? AppColors.leaf : AppColors.amber;
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.85, end: 1),
+      duration: const Duration(milliseconds: 450),
+      curve: Curves.elasticOut,
+      builder: (_, v, c) => Transform.scale(scale: v, alignment: Alignment.centerLeft, child: c),
+      child: Container(
+        margin: const EdgeInsets.only(top: 8),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(children: [
+          Icon(correct ? Icons.celebration_rounded : Icons.tips_and_updates_rounded,
+              color: color, size: 24),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+                correct
+                    ? context.tr('إجابة صحيحة! أحسنت، واصل.', 'Correct! Nice work, keep going.')
+                    : context.tr('قريب! اقرأ الشرح وستتذكرها المرة القادمة.',
+                        'So close! Read the explanation and you will nail it next time.'),
+                style: TextStyle(color: color, fontWeight: FontWeight.w700, height: 1.4)),
+          ),
+        ]),
       ),
     );
   }
@@ -363,15 +454,15 @@ class _AddQuestionFormState extends State<AddQuestionForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إضافة سؤال لبنك الأسئلة', 'Add a bank question'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 14),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 16),
         ChipSelector<int>(
           values: const [1, 2, 3],
           selected: _grade,
           label: (g) => gradeShort(context, g),
           onChanged: (g) => setState(() => _grade = g),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         if (chapters.isNotEmpty)
           ChipSelector<String>(
             values: chapters.map((c) => c.en).toList(),
@@ -380,7 +471,7 @@ class _AddQuestionFormState extends State<AddQuestionForm> {
             onChanged: (en) =>
                 setState(() => _chapter = chapters.firstWhere((c) => c.en == en)),
           ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         ChipSelector<QType>(
           values: QType.values,
           selected: _type,
@@ -389,7 +480,7 @@ class _AddQuestionFormState extends State<AddQuestionForm> {
               : context.tr('مقالي', 'Written'),
           onChanged: (t) => setState(() => _type = t),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         ChipSelector<Difficulty>(
           values: Difficulty.values,
           selected: _diff,
@@ -406,7 +497,7 @@ class _AddQuestionFormState extends State<AddQuestionForm> {
               children: [
                 for (var i = 0; i < 4; i++)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 12),
                     child: Row(children: [
                       Radio<int>(value: i),
                       Expanded(
@@ -425,7 +516,7 @@ class _AddQuestionFormState extends State<AddQuestionForm> {
           Text(context.tr('اختر الدائرة بجوار الإجابة الصحيحة',
               'Select the circle next to the correct answer'),
               style: TextStyle(color: context.muted, fontSize: 12)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
         ],
         LabeledField(
             _type == QType.mcq

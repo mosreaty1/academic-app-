@@ -59,16 +59,16 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   stroke: 11,
                   child: Text('${(pct * 100).round()}%',
                       style: const TextStyle(
-                          fontSize: 21, fontWeight: FontWeight.w700)),
+                          fontSize: 18, fontWeight: FontWeight.w700)),
                 ),
-                const SizedBox(width: 18),
+                const SizedBox(width: 20),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(context.tr('نسبة الحضور', 'Attendance rate'),
                           style: const TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 16)),
+                              fontWeight: FontWeight.w700, fontSize: 18)),
                       const SizedBox(height: 4),
                       Text(
                           pct >= 0.9
@@ -76,8 +76,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                               : pct >= 0.75
                                   ? context.tr('جيد، حاول تقليل الغياب', 'Good, try to reduce absences')
                                   : context.tr('تنبيه: نسبة الحضور منخفضة', 'Warning: low attendance'),
-                          style: TextStyle(color: context.muted, fontSize: 13)),
-                      const SizedBox(height: 10),
+                          style: TextStyle(color: context.muted, fontSize: 14)),
+                      const SizedBox(height: 12),
                       Text(
                           context.tr('${stats.total} يوم دراسي مسجل',
                               '${stats.total} school days recorded'),
@@ -94,7 +94,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               for (final t in AttStatus.values)
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: _CountTile(
                       label: attLabel(context, t),
                       color: attColor(t),
@@ -135,7 +135,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: AppCard(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Row(
                     children: [
                       IconBadge(
@@ -188,9 +188,9 @@ class _CountTile extends StatelessWidget {
         children: [
           Text('$value',
               style: TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.w700, color: color)),
-          const SizedBox(height: 2),
-          Text(label, style: TextStyle(color: context.muted, fontSize: 11.5)),
+                  fontSize: 18, fontWeight: FontWeight.w700, color: color)),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(color: context.muted, fontSize: 12)),
         ],
       ),
     );
@@ -237,7 +237,7 @@ class _MonthCalendar extends StatelessWidget {
                   child: Text(
                       '${fmtDate(context, first).split(' ').last} ${month.year}',
                       style: const TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 16)),
+                          fontWeight: FontWeight.w700, fontSize: 18)),
                 ),
               ),
               IconButton(
@@ -254,26 +254,26 @@ class _MonthCalendar extends StatelessWidget {
                     child: Text(_shortDay(context, w),
                         style: TextStyle(
                             color: context.muted,
-                            fontSize: 11,
+                            fontSize: 12,
                             fontWeight: FontWeight.w700)),
                   ),
                 ),
             ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           GridView.count(
             crossAxisCount: 7,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 6,
-            crossAxisSpacing: 6,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
             children: [
               for (var i = 0; i < offset; i++) const SizedBox.shrink(),
               for (var d = 1; d <= days; d++)
                 _cell(context, s, DateTime(month.year, month.month, d), today),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Wrap(
             spacing: 12,
             runSpacing: 4,
@@ -285,9 +285,9 @@ class _MonthCalendar extends StatelessWidget {
                       height: 10,
                       decoration: BoxDecoration(
                           color: attColor(t), shape: BoxShape.circle)),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 4),
                   Text(attLabel(context, t),
-                      style: TextStyle(color: context.muted, fontSize: 11.5)),
+                      style: TextStyle(color: context.muted, fontSize: 12)),
                 ]),
             ],
           ),
@@ -310,9 +310,9 @@ class _MonthCalendar extends StatelessWidget {
       child: Center(
         child: Text('${d.day}',
             style: TextStyle(
-                fontWeight: st == null ? FontWeight.w500 : FontWeight.w700,
+                fontWeight: st == null ? FontWeight.w400 : FontWeight.w700,
                 color: color ?? (weekend ? context.muted.withValues(alpha: 0.5) : context.ink),
-                fontSize: 13)),
+                fontSize: 14)),
       ),
     );
   }

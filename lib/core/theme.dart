@@ -56,12 +56,15 @@ class AppTheme {
           displayColor: scheme.onSurface,
         )
         .copyWith(
-          titleLarge: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, height: 1.3),
-          titleMedium: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, height: 1.35),
-          titleSmall: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700, height: 1.35),
+          titleLarge: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, height: 1.3),
+          titleMedium: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, height: 1.35),
+          titleSmall: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, height: 1.35),
+          bodyLarge: const TextStyle(fontSize: 14, height: 1.5),
           bodyMedium: const TextStyle(fontSize: 14, height: 1.5),
-          bodySmall: const TextStyle(fontSize: 12.5, height: 1.45),
-          labelSmall: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+          labelLarge: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+          labelMedium: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+          bodySmall: const TextStyle(fontSize: 12, height: 1.45),
+          labelSmall: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
         );
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(14),
@@ -93,7 +96,7 @@ class AppTheme {
         filled: true,
         fillColor: dark ? const Color(0xFF1B2823) : Colors.white,
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: border,
         enabledBorder: border,
         focusedBorder: border.copyWith(
@@ -103,17 +106,62 @@ class AppTheme {
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(52),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           elevation: 0,
+          shadowColor: Colors.transparent,
+          backgroundColor: Colors.transparent,
+          disabledBackgroundColor: Colors.transparent,
           textStyle: text.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+          backgroundBuilder: (context, states, child) {
+            final off = states.contains(WidgetState.disabled);
+            final pressed = states.contains(WidgetState.pressed);
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: off
+                      ? [
+                          scheme.onSurface.withValues(alpha: 0.12),
+                          scheme.onSurface.withValues(alpha: 0.12)
+                        ]
+                      : [
+                          Color.lerp(scheme.primary, Colors.white, 0.10)!,
+                          scheme.primary
+                        ],
+                ),
+                boxShadow: off || pressed
+                    ? null
+                    : [
+                        BoxShadow(
+                            color: scheme.primary.withValues(alpha: dark ? 0.35 : 0.28),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6)),
+                      ],
+              ),
+              child: DecoratedBox(
+                position: DecorationPosition.foreground,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border(
+                    top: BorderSide(
+                        color: Colors.white.withValues(alpha: off ? 0 : 0.22)),
+                  ),
+                ),
+                child: child,
+              ),
+            );
+          },
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(52),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-          side: BorderSide(color: scheme.primary.withValues(alpha: 0.35)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          backgroundColor: scheme.primary.withValues(alpha: 0.05),
+          side: BorderSide(color: scheme.primary.withValues(alpha: 0.18)),
           textStyle: text.titleSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
@@ -131,10 +179,10 @@ class AppTheme {
                 : (dark ? const Color(0xFF8FA39B) : AppColors.muted))),
         labelTextStyle: WidgetStateProperty.resolveWith((s) => text.labelSmall!
             .copyWith(
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: s.contains(WidgetState.selected)
                     ? FontWeight.w700
-                    : FontWeight.w500,
+                    : FontWeight.w400,
                 color: s.contains(WidgetState.selected)
                     ? scheme.primary
                     : (dark ? const Color(0xFF8FA39B) : AppColors.muted))),
@@ -156,7 +204,7 @@ class AppTheme {
       ),
       tabBarTheme: TabBarThemeData(
         labelStyle: text.titleSmall,
-        unselectedLabelStyle: text.titleSmall?.copyWith(fontWeight: FontWeight.w500),
+        unselectedLabelStyle: text.titleSmall?.copyWith(fontWeight: FontWeight.w400),
         indicatorSize: TabBarIndicatorSize.label,
         dividerColor: dark ? const Color(0xFF24322D) : const Color(0xFFE6EAE8),
       ),

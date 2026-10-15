@@ -66,7 +66,7 @@ class ParentHome extends StatelessWidget {
         children: [
           HeroHeader(
             colors: const [Color(0xFF176B8A), Color(0xFF0B4A63)],
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 26),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -77,11 +77,11 @@ class ParentHome extends StatelessWidget {
                       children: [
                         Text(greeting(context),
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.85), fontSize: 13)),
+                                color: Colors.white.withValues(alpha: 0.85), fontSize: 14)),
                         Text(me.name.of(context),
                             style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w700)),
                       ],
                     ),
@@ -95,7 +95,7 @@ class ParentHome extends StatelessWidget {
                     child: Row(children: [
                       for (final c in s.children)
                         Padding(
-                          padding: const EdgeInsetsDirectional.only(end: 10),
+                          padding: const EdgeInsetsDirectional.only(end: 12),
                           child: GestureDetector(
                             onTap: () => s.selectChild(c.id),
                             child: AnimatedContainer(
@@ -121,7 +121,7 @@ class ParentHome extends StatelessWidget {
                                                 : Colors.white)),
                                     Text(gradeName(context, c.grade),
                                         style: TextStyle(
-                                            fontSize: 11,
+                                            fontSize: 12,
                                             color: c.id == kid.id
                                                 ? AppColors.muted
                                                 : Colors.white70)),
@@ -136,12 +136,12 @@ class ParentHome extends StatelessWidget {
                 else
                   Row(children: [
                     Avatar(kid.name.initialOf(context), kid.color, radius: 20),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 12),
                     Text(kid.name.of(context),
                         style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w700)),
                   ]),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 Row(children: [
                   _Stat('${(stats.pct * 100).round()}%', context.tr('الحضور', 'Attendance'),
                       () => onTab(2)),
@@ -164,14 +164,14 @@ class ParentHome extends StatelessWidget {
                     child: Row(children: [
                       const IconBadge(Icons.verified_rounded, AppColors.leaf),
                       const SizedBox(width: 12),
-                      Expanded(child: Text(context.tr('لا توجد تنبيهات. كل شيء على ما يرام','No alerts. All good'))),
+                      Expanded(child: Text(context.tr('لا توجد تنبيهات. كل شيء على ما يرام', 'No alerts. All good'))),
                     ]),
                   ),
                 for (final a in alerts)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: AppCard(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       child: Row(children: [
                         IconBadge(a.$1, a.$2, size: 40),
                         const SizedBox(width: 12),

@@ -65,14 +65,14 @@ class _SubscribersState extends State<_Subscribers> {
                   color: AppColors.leaf,
                   value: '$active',
                   label: context.tr('مشترك فعّال', 'Active'))),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Expanded(
               child: StatCard(
                   icon: Icons.person_off_rounded,
                   color: AppColors.coral,
                   value: '${s.students.length - active}',
                   label: context.tr('غير مشترك', 'Not subscribed'))),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Expanded(
               child: StatCard(
                   icon: Icons.payments_rounded,
@@ -80,7 +80,7 @@ class _SubscribersState extends State<_Subscribers> {
                   value: money(context, revenue),
                   label: context.tr('إيراد الدفع', 'Online revenue'))),
         ]),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         ChipSelector<int?>(
           values: const [null, 1, 2, 3],
           selected: _grade,
@@ -140,12 +140,12 @@ class _ActivateSheet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(student.name.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
         Text(student.code, style: TextStyle(color: context.muted)),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         Text(context.tr('تفعيل / تمديد يدوي', 'Activate / extend manually'),
             style: const TextStyle(fontWeight: FontWeight.w700)),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         for (final p in AppState.plans)
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
@@ -177,7 +177,7 @@ class _Codes extends StatelessWidget {
           icon: const Icon(Icons.add_card_rounded),
           label: Text(context.tr('إنشاء أكواد جديدة', 'Generate new codes')),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         if (s.codes.isEmpty)
           EmptyState(Icons.confirmation_number_outlined,
               context.tr('لا توجد أكواد', 'No codes yet')),
@@ -185,7 +185,7 @@ class _Codes extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: AppCard(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(children: [
                 Expanded(
                   child: Column(
@@ -196,7 +196,7 @@ class _Codes extends StatelessWidget {
                         child: Text(c.code,
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
-                                fontSize: 17,
+                                fontSize: 18,
                                 letterSpacing: 1.2,
                                 decoration: c.used ? TextDecoration.lineThrough : null,
                                 color: c.used ? context.muted : context.ink)),
@@ -244,29 +244,29 @@ class _GenerateSheetState extends State<_GenerateSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إنشاء أكواد تفعيل', 'Generate activation codes'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 14),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 16),
         ChipSelector<String>(
           values: AppState.plans.map((p) => p.id).toList(),
           selected: _plan,
           label: (id) => AppState.plan(id).name.of(context),
           onChanged: (v) => setState(() => _plan = v),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         ChipSelector<int>(
           values: const [0, 1, 2, 3],
           selected: _grade,
           label: (g) => g == 0 ? context.tr('كل الصفوف', 'All grades') : gradeShort(context, g),
           onChanged: (v) => setState(() => _grade = v),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         ChipSelector<int>(
           values: const [1, 5, 10, 25, 50],
           selected: _qty,
           label: (n) => '$n',
           onChanged: (v) => setState(() => _qty = v),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         FilledButton(
           onPressed: () {
             final made = context.read<AppState>().generateCodes(_plan, _grade, _qty);

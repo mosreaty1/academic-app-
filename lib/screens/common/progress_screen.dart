@@ -52,7 +52,7 @@ class ProgressScreen extends StatelessWidget {
                   label: context.tr('متوسط الامتحانات', 'Exam average'),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
                 child: StatCard(
                   icon: Icons.assignment_turned_in_rounded,
@@ -61,7 +61,7 @@ class ProgressScreen extends StatelessWidget {
                   label: context.tr('متوسط الواجبات', 'Homework average'),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
                 child: StatCard(
                   icon: Icons.event_available_rounded,
@@ -117,7 +117,7 @@ class ProgressScreen extends StatelessWidget {
                     children: [
                       for (final e in mastery.entries)
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 7),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
                           child: _MasteryRow(
                             label: s.questions
                                 .firstWhere((q) => q.chapter.en == e.key)
@@ -179,12 +179,12 @@ class _Bar extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(label,
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: context.muted, fontSize: 10)),
+              style: TextStyle(color: context.muted, fontSize: 12)),
         ],
       ),
     );
@@ -204,11 +204,11 @@ class _MasteryRow extends StatelessWidget {
         Row(children: [
           Expanded(
               child: Text(label,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5))),
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14))),
           Text('${(value * 100).round()}%',
               style: TextStyle(fontWeight: FontWeight.w700, color: color)),
         ]),
-        const SizedBox(height: 6),
+        const SizedBox(height: 8),
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: LinearProgressIndicator(

@@ -30,11 +30,11 @@ class AnnouncementsScreen extends StatelessWidget {
       body: list.isEmpty
           ? EmptyState(Icons.campaign_outlined, context.tr('لا توجد إعلانات', 'No announcements'))
           : ListView(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 92),
               children: [
                 for (final a in list)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 12),
                     child: AppCard(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +48,7 @@ class AnnouncementsScreen extends StatelessWidget {
                             Expanded(
                               child: Text(a.title.of(context),
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w700, fontSize: 15.5)),
+                                      fontWeight: FontWeight.w700, fontSize: 14)),
                             ),
                             Pill(gradeShort(context, a.grade), AppColors.primary),
                           ]),
@@ -93,8 +93,8 @@ class _PostFormState extends State<_PostForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إعلان جديد', 'New announcement'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 14),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 16),
         LabeledField(context.tr('العنوان', 'Title'), _title),
         LabeledField(context.tr('النص', 'Message'), _body, maxLines: 4),
         ChipSelector<int>(
@@ -156,26 +156,26 @@ class NotificationsScreen extends StatelessWidget {
         children: [
           for (final n in s.notifications)
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 12),
               child: AppCard(
                 color: n.read ? null : context.brandSoft,
                 child: Row(children: [
                   IconBadge(n.icon, n.color),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(n.title.of(context),
                             style: const TextStyle(fontWeight: FontWeight.w700)),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 4),
                         Text(n.body.of(context),
-                            style: TextStyle(color: context.muted, fontSize: 13)),
+                            style: TextStyle(color: context.muted, fontSize: 14)),
                       ],
                     ),
                   ),
                   Text(timeAgo(context, n.at),
-                      style: TextStyle(color: context.muted, fontSize: 11)),
+                      style: TextStyle(color: context.muted, fontSize: 12)),
                 ]),
               ),
             ),

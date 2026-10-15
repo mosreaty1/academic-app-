@@ -55,7 +55,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
             )
           : null,
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 92),
         children: [
           if (!teacher)
             AppCard(
@@ -69,7 +69,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
               child: Row(children: [
                 Icon(active ? Icons.workspace_premium_rounded : Icons.lock_open_rounded,
                     color: Colors.white, size: 36),
-                const SizedBox(width: 14),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,8 +81,8 @@ class _LessonsScreenState extends State<LessonsScreen> {
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
-                              fontSize: 16)),
-                      const SizedBox(height: 2),
+                              fontSize: 18)),
+                      const SizedBox(height: 4),
                       Text(
                           active
                               ? context.tr('متبقي ${sub!.daysLeft} يوم • $watched/${list.length} درس مكتمل',
@@ -91,7 +91,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
                                   'Subscribe or enter a code to watch premium lessons'),
                           style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.9),
-                              fontSize: 12.5)),
+                              fontSize: 12)),
                     ],
                   ),
                 ),
@@ -108,13 +108,18 @@ class _LessonsScreenState extends State<LessonsScreen> {
           ],
           if (list.isEmpty)
             EmptyState(Icons.ondemand_video_rounded,
-                context.tr('لا توجد دروس بعد', 'No lessons yet')),
+                context.tr('لا توجد دروس بعد', 'No lessons yet'),
+                subtitle: teacher
+                    ? context.tr('ارفع أول درس فيديو ليراه الطلاب.', 'Publish your first video lesson for students.')
+                    : context.tr('ستظهر الدروس هنا فور نشرها.', 'Lessons will appear here as soon as they are published.'),
+                actionLabel: teacher ? context.tr('إضافة درس', 'Add a lesson') : null,
+                onAction: () => showSheet(context, (_) => const _AddLessonForm())),
           for (final e in groups.entries) ...[
             SectionHeader(
                 '${teacher ? '${gradeShort(context, e.value.first.grade)} • ' : ''}${e.value.first.chapter.of(context)}'),
             for (final l in e.value)
               Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 12),
                 child: _LessonCard(lesson: l, studentId: sid, teacher: teacher),
               ),
           ],
@@ -189,15 +194,15 @@ class _LessonCard extends StatelessWidget {
                   end: 5,
                   bottom: 5,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                     decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.55),
                         borderRadius: BorderRadius.circular(5)),
                     child: Text('${lesson.minutes}:00',
                         style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
                             fontFeatures: [FontFeature.tabularFigures()])),
                   ),
                 ),
@@ -222,7 +227,7 @@ class _LessonCard extends StatelessWidget {
                 children: [
                   Row(mainAxisSize: MainAxisSize.min, children: [
                     Icon(Icons.schedule_rounded, size: 13, color: context.muted),
-                    const SizedBox(width: 3),
+                    const SizedBox(width: 4),
                     Text('${lesson.minutes} ${context.tr('د', 'min')}',
                         style: TextStyle(color: context.muted, fontSize: 12)),
                   ]),
@@ -233,7 +238,7 @@ class _LessonCard extends StatelessWidget {
                 ],
               ),
               if (!teacher && progress > 0 && !locked) ...[
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: LinearProgressIndicator(
@@ -275,14 +280,14 @@ class _PaywallSheet extends StatelessWidget {
         const Icon(Icons.lock_rounded, size: 46, color: AppColors.amber),
         const SizedBox(height: 12),
         Text(context.tr('هذا الدرس للمشتركين', 'This lesson is for subscribers'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 6),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 8),
         Text(
             context.tr('اشترك الآن أو فعّل كود الاشتراك لمشاهدة كل الدروس.',
                 'Subscribe now or redeem a code to watch every lesson.'),
             textAlign: TextAlign.center,
             style: TextStyle(color: context.muted, height: 1.5)),
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         FilledButton(
           onPressed: () {
             Navigator.pop(context);
@@ -372,7 +377,7 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
     final nextLesson = idx >= 0 && idx < next.length - 1 ? next[idx + 1] : null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(_lesson.title.of(context), style: const TextStyle(fontSize: 16))),
+      appBar: AppBar(title: Text(_lesson.title.of(context), style: const TextStyle(fontSize: 18))),
       body: ListView(
         children: [
           Container(
@@ -474,7 +479,7 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
                         PopupMenuItem(value: v, child: Text('${v}x')),
                     ],
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text('${_speed}x',
                           style: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.w700)),
@@ -489,17 +494,17 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(_lesson.title.of(context),
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 8),
                 Wrap(spacing: 8, children: [
                   Pill(_lesson.chapter.of(context), AppColors.primary),
                   Pill('${_lesson.minutes} ${context.tr('دقيقة', 'min')}', AppColors.sky),
                   Pill(gradeShort(context, _lesson.grade), AppColors.violet),
                 ]),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 Text(_lesson.description.of(context), style: const TextStyle(height: 1.6)),
                 if (nextLesson != null) ...[
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   OutlinedButton.icon(
                     onPressed: () {
                       if (widget.studentId != null &&
@@ -565,8 +570,8 @@ class _AddLessonFormState extends State<_AddLessonForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إضافة درس فيديو', 'Add a video lesson'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 14),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 16),
         LabeledField(context.tr('عنوان الدرس', 'Lesson title'), _title),
         LabeledField(context.tr('الوصف', 'Description'), _desc, maxLines: 2),
         LabeledField(context.tr('رابط الفيديو (mp4 / m3u8)', 'Video URL (mp4 / m3u8)'), _url,
@@ -577,7 +582,7 @@ class _AddLessonFormState extends State<_AddLessonForm> {
           label: (g) => gradeShort(context, g),
           onChanged: (g) => setState(() => _grade = g),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         if (chapters.isNotEmpty)
           ChipSelector<String>(
             values: chapters.map((c) => c.en).toList(),

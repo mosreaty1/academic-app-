@@ -22,7 +22,7 @@ class TeacherHomeworkScreen extends StatelessWidget {
         label: Text(context.tr('واجب جديد', 'New homework')),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 92),
         children: [
           for (final h in list)
             Builder(builder: (_) {
@@ -30,23 +30,23 @@ class TeacherHomeworkScreen extends StatelessWidget {
               final roster = s.studentsOfGrade(h.grade).length;
               final toGrade = subs.where((x) => x.mark == null).length;
               return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 12),
                 child: AppCard(
                   onTap: () => go(context, HomeworkDetailScreen(hwId: h.id)),
                   child: Row(children: [
                     const IconBadge(Icons.assignment_rounded, AppColors.amber),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(h.title.of(context),
-                              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                          const SizedBox(height: 3),
+                              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                          const SizedBox(height: 4),
                           Text(
                               '${gradeShort(context, h.grade)} • ${context.tr('الموعد', 'Due')} ${fmtDate(context, h.due)}',
                               style: TextStyle(color: context.muted, fontSize: 12)),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 8),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(6),
                             child: LinearProgressIndicator(
@@ -59,7 +59,7 @@ class TeacherHomeworkScreen extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                               context.tr('سلّم ${subs.length} من $roster', '${subs.length} of $roster submitted'),
-                              style: TextStyle(color: context.muted, fontSize: 11.5)),
+                              style: TextStyle(color: context.muted, fontSize: 12)),
                         ],
                       ),
                     ),
@@ -94,13 +94,13 @@ class HomeworkDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(spacing: 8, runSpacing: 6, children: [
+                Wrap(spacing: 8, runSpacing: 8, children: [
                   Pill(gradeShort(context, h.grade), AppColors.primary),
                   Pill(h.chapter.of(context), AppColors.sky),
                   Pill('${context.tr('الموعد', 'Due')} ${fmtDate(context, h.due)}', AppColors.amber),
                   Pill('${h.maxMarks} ${context.tr('درجة', 'marks')}', AppColors.violet),
                 ]),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(h.description.of(context), style: const TextStyle(height: 1.55)),
               ],
             ),
@@ -112,7 +112,7 @@ class HomeworkDetailScreen extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: AppCard(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   onTap: sub == null
                       ? null
                       : () => showSheet(context, (_) => _GradeSheet(hw: h, sub: sub)),
@@ -168,7 +168,7 @@ class _GradeSheetState extends State<_GradeSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(st.name.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
         Text(timeAgo(context, widget.sub.at), style: TextStyle(color: context.muted)),
         const SizedBox(height: 12),
         Container(
@@ -234,8 +234,8 @@ class _CreateHomeworkFormState extends State<_CreateHomeworkForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('واجب جديد', 'New homework'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 14),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 16),
         LabeledField(context.tr('العنوان', 'Title'), _title),
         LabeledField(context.tr('التعليمات', 'Instructions'), _desc, maxLines: 3),
         ChipSelector<int>(
@@ -244,7 +244,7 @@ class _CreateHomeworkFormState extends State<_CreateHomeworkForm> {
           label: (g) => gradeShort(context, g),
           onChanged: (g) => setState(() => _grade = g),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         if (chapters.isNotEmpty)
           ChipSelector<String>(
             values: chapters.map((c) => c.en).toList(),
@@ -253,7 +253,7 @@ class _CreateHomeworkFormState extends State<_CreateHomeworkForm> {
             onChanged: (en) =>
                 setState(() => _chapter = chapters.firstWhere((c) => c.en == en)),
           ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         Row(children: [
           Expanded(
             child: OutlinedButton.icon(

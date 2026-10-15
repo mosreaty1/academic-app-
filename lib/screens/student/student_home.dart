@@ -7,6 +7,8 @@ import '../../core/widgets.dart';
 import '../../data/app_state.dart';
 import '../common/attendance_screen.dart';
 import '../common/dashboard_widgets.dart';
+import '../common/lessons_screen.dart';
+import '../../models/models.dart';
 import '../common/progress_screen.dart';
 import '../common/question_bank_screen.dart';
 import '../common/store_screen.dart';
@@ -25,6 +27,22 @@ class StudentHome extends StatelessWidget {
     final avg = s.averageScore(me.id);
     final pending = s.pendingHomeworkCount(me.id);
     final today = dayOnly(DateTime.now());
+    // Returning students resume the lesson they were watching; new students
+    // get the first lesson they can open.
+    final watchable =
+        s.lessonsOfGrade(me.grade).where((l) => s.canWatch(me.id, l)).toList();
+    Lesson? cont;
+    for (final l in watchable) {
+      final p = s.progressOf(me.id, l.id);
+      if (p > 0 && p < 0.9) {
+        cont = l;
+        break;
+      }
+    }
+    for (final l in watchable) {
+      if (cont != null) break;
+      if (s.progressOf(me.id, l.id) < 0.9) cont = l;
+    }
     final openExams = s
         .examsOfGrade(me.grade)
         .where((e) => dayOnly(e.date) == today && s.attemptOf(e.id, me.id) == null)
@@ -35,7 +53,7 @@ class StudentHome extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           HeroHeader(
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 26),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -49,23 +67,23 @@ class StudentHome extends StatelessWidget {
                         Text(greeting(context),
                             style: TextStyle(
                                 color: Colors.white.withValues(alpha: 0.85),
-                                fontSize: 13)),
+                                fontSize: 14)),
                         Text(me.name.of(context),
                             style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w700)),
                       ],
                     ),
                   ),
                   const NotificationBell(),
                 ]),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 Wrap(spacing: 8, runSpacing: 8, children: [
                   _Chip(Icons.school_rounded, gradeName(context, me.grade)),
                   _Chip(Icons.class_rounded, '${context.tr('فصل', 'Class')} ${me.section}'),
                 ]),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     _HeroStat(
@@ -107,7 +125,7 @@ class StudentHome extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13)),
                           child: const Icon(Icons.alarm_on_rounded, color: AppColors.gold, size: 24),
                         ),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,11 +138,59 @@ class StudentHome extends StatelessWidget {
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 16)),
+                                      fontSize: 18)),
                             ],
                           ),
                         ),
                         const Icon(Icons.arrow_forward_rounded, color: Colors.white),
+                      ]),
+                    ),
+                  ),
+                if (cont != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: AppCard(
+                      onTap: () => go(context, LessonPlayerScreen(lessonId: cont!.id, studentId: me.id)),
+                      padding: const EdgeInsets.all(16),
+                      child: Row(children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                              color: context.brandSoft,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Icon(Icons.play_arrow_rounded, color: context.brand, size: 28),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  s.progressOf(me.id, cont.id) > 0
+                                      ? context.tr('أكمل من حيث توقفت', 'Pick up where you left off')
+                                      : context.tr('ابدأ درسك التالي', 'Start your next lesson'),
+                                  style: TextStyle(fontSize: 12, color: context.muted)),
+                              const SizedBox(height: 4),
+                              Text(cont.title.of(context),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                              const SizedBox(height: 8),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: LinearProgressIndicator(
+                                  value: s.progressOf(me.id, cont.id),
+                                  minHeight: 4,
+                                  color: context.brand,
+                                  backgroundColor: context.line,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Icon(Icons.chevron_right_rounded, color: context.muted),
                       ]),
                     ),
                   ),
@@ -144,7 +210,7 @@ class StudentHome extends StatelessWidget {
                               Text(context.tr('افتح كل الدروس المدفوعة', 'Unlock all premium lessons'),
                                   style: const TextStyle(fontWeight: FontWeight.w700)),
                               Text(context.tr('اشترك أو فعّل كود الاشتراك', 'Subscribe or redeem a code'),
-                                  style: TextStyle(color: context.muted, fontSize: 12.5)),
+                                  style: TextStyle(color: context.muted, fontSize: 12)),
                             ],
                           ),
                         ),
@@ -194,16 +260,16 @@ class _Chip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.16),
           borderRadius: BorderRadius.circular(20)),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         Icon(icon, size: 15, color: Colors.white),
-        const SizedBox(width: 6),
+        const SizedBox(width: 8),
         Text(text,
             style: const TextStyle(
-                color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.w700)),
+                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700)),
       ]),
     );
   }

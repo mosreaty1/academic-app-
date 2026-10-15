@@ -17,6 +17,20 @@ class StoreScreen extends StatefulWidget {
 class _StoreScreenState extends State<StoreScreen> {
   BookCategory? _cat;
   String _q = '';
+  final _search = TextEditingController();
+  final List<String> _recent = [];
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  void _setQuery(String v) {
+    _search.text = v;
+    _search.selection = TextSelection.collapsed(offset: v.length);
+    setState(() => _q = v);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,13 +83,13 @@ class _StoreScreenState extends State<StoreScreen> {
                     end: 4,
                     top: 6,
                     child: Container(
-                      padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(4),
                       decoration: const BoxDecoration(
                           color: AppColors.coral, shape: BoxShape.circle),
                       child: Text('${s.cartCount}',
                           style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 10,
+                              fontSize: 12,
                               fontWeight: FontWeight.w700)),
                     ),
                   ),
@@ -91,15 +105,41 @@ class _StoreScreenState extends State<StoreScreen> {
             )
           : null,
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 92),
         children: [
           TextField(
+            controller: _search,
             onChanged: (v) => setState(() => _q = v),
+            onSubmitted: (v) {
+              final q = v.trim();
+              if (q.isNotEmpty) {
+                setState(() {
+                  _recent.remove(q);
+                  _recent.insert(0, q);
+                  if (_recent.length > 4) _recent.removeLast();
+                });
+              }
+            },
             decoration: InputDecoration(
               hintText: context.tr('ابحث عن كتاب أو مذكرة...', 'Search books & notes...'),
               prefixIcon: const Icon(Icons.search_rounded),
+              suffixIcon: _q.isEmpty
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.close_rounded),
+                      onPressed: () => _setQuery('')),
             ),
           ),
+          if (_q.isEmpty)
+            SearchSuggestions(
+              recent: _recent,
+              popular: [
+                context.tr('مذكرة', 'Notes'),
+                context.tr('بنك الأسئلة', 'Question'),
+                context.tr('كروت', 'Cards'),
+              ],
+              onPick: _setQuery,
+            ),
           const SizedBox(height: 12),
           ChipSelector<BookCategory?>(
             values: [null, ...BookCategory.values],
@@ -107,10 +147,16 @@ class _StoreScreenState extends State<StoreScreen> {
             label: (c) => c == null ? context.tr('الكل', 'All') : bookCategoryLabel(context, c),
             onChanged: (c) => setState(() => _cat = c),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           if (list.isEmpty)
             EmptyState(Icons.search_off_rounded,
-                context.tr('لا توجد منتجات', 'No products found')),
+                context.tr('لا توجد منتجات', 'No products found'),
+                subtitle: context.tr('جرّب كلمة أخرى أو اعرض كل المنتجات.', 'Try another word or browse everything.'),
+                actionLabel: context.tr('عرض الكل', 'Show all'),
+                onAction: () {
+                  _setQuery('');
+                  setState(() => _cat = null);
+                }),
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -170,14 +216,14 @@ class _BookCard extends StatelessWidget {
                       top: 8,
                       start: 8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(10)),
                         child: Text(gradeShort(context, book.grade),
                             style: TextStyle(
                                 color: book.color,
-                                fontSize: 10.5,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ),
                     ),
@@ -194,11 +240,11 @@ class _BookCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 13.5, height: 1.3)),
+                        fontWeight: FontWeight.w700, fontSize: 14, height: 1.3)),
                 const SizedBox(height: 4),
                 Row(children: [
                   const Icon(Icons.star_rounded, color: AppColors.amber, size: 15),
-                  const SizedBox(width: 2),
+                  const SizedBox(width: 4),
                   Text('${book.rating}',
                       style: TextStyle(color: context.muted, fontSize: 12)),
                   const Spacer(),
@@ -206,17 +252,17 @@ class _BookCard extends StatelessWidget {
                     Text(context.tr('آخر ${book.stock}', 'Only ${book.stock}'),
                         style: const TextStyle(
                             color: AppColors.coral,
-                            fontSize: 10.5,
+                            fontSize: 12,
                             fontWeight: FontWeight.w700)),
                 ]),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Row(children: [
                   Expanded(
                     child: Text(money(context, book.price),
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
                             color: context.brand,
-                            fontSize: 15)),
+                            fontSize: 14)),
                   ),
                   if (!teacher)
                     InkWell(
@@ -225,7 +271,7 @@ class _BookCard extends StatelessWidget {
                         toast(context, context.tr('تمت الإضافة إلى السلة', 'Added to cart'));
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(7),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             color: inCart > 0 ? AppColors.leaf : context.cs.primary,
                             borderRadius: BorderRadius.circular(12)),
@@ -279,19 +325,19 @@ class _BookSheet extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(money(context, book.price),
                     style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w700, color: context.brand)),
+                        fontSize: 18, fontWeight: FontWeight.w700, color: context.brand)),
               ],
             ),
           ),
         ]),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         Wrap(spacing: 8, children: [
           Pill(bookCategoryLabel(context, book.category), book.color),
           Pill(gradeName(context, book.grade), AppColors.primary),
           Pill(context.tr('المتاح ${book.stock}', '${book.stock} in stock'),
               book.stock > 10 ? AppColors.leaf : AppColors.coral),
         ]),
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         if (!teacher)
           FilledButton.icon(
             onPressed: book.stock == 0
@@ -339,8 +385,8 @@ class _AddBookFormState extends State<_AddBookForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إضافة منتج للمتجر', 'Add store product'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 14),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 16),
         LabeledField(context.tr('الاسم', 'Name'), _title),
         LabeledField(context.tr('وصف مختصر', 'Short description'), _sub),
         Row(children: [
@@ -354,7 +400,7 @@ class _AddBookFormState extends State<_AddBookForm> {
           label: (c) => bookCategoryLabel(context, c),
           onChanged: (c) => setState(() => _cat = c),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         ChipSelector<int>(
           values: const [0, 1, 2, 3],
           selected: _grade,
@@ -422,13 +468,15 @@ class _CartScreenState extends State<CartScreen> {
       body: lines.isEmpty
           ? EmptyState(Icons.shopping_bag_outlined,
               context.tr('السلة فارغة', 'Your cart is empty'),
-              subtitle: context.tr('أضف كتباً ومذكرات من المتجر', 'Add books and notes from the store'))
+              subtitle: context.tr('أضف كتباً ومذكرات من المتجر', 'Add books and notes from the store'),
+              actionLabel: context.tr('تصفح المتجر', 'Browse the store'),
+              onAction: () => Navigator.pop(context))
           : ListView(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
               children: [
                 for (final l in lines)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 12),
                     child: AppCard(
                       padding: const EdgeInsets.all(12),
                       child: Row(children: [
@@ -479,7 +527,7 @@ class _CartScreenState extends State<CartScreen> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8),
                           child: AppCard(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             onTap: () => setState(() => _pay = p),
                             child: Row(children: [
                               Radio<PayMethod>(value: p),
@@ -493,18 +541,18 @@ class _CartScreenState extends State<CartScreen> {
                                           ? Icons.account_balance_wallet_rounded
                                           : Icons.credit_card_rounded,
                                   color: context.muted),
-                              const SizedBox(width: 10),
+                              const SizedBox(width: 12),
                             ]),
                           ),
                         ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 AppCard(
                   child: Column(children: [
                     _sumRow(context, context.tr('المجموع', 'Subtotal'), money(context, s.cartTotal)),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
                     _sumRow(context, context.tr('التوصيل', 'Delivery'), context.tr('مجاني', 'Free')),
                     const Divider(height: 24),
                     _sumRow(context, context.tr('الإجمالي', 'Total'), money(context, s.cartTotal), bold: true),
@@ -531,7 +579,7 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget _sumRow(BuildContext context, String a, String b, {bool bold = false}) {
     final st = TextStyle(
-        fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
+        fontWeight: bold ? FontWeight.w700 : FontWeight.w700,
         fontSize: bold ? 17 : 14);
     return Row(children: [
       Expanded(child: Text(a, style: st)),
@@ -573,45 +621,64 @@ class _OrderDone extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(28),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 110,
-                height: 110,
-                decoration: BoxDecoration(
-                    color: AppColors.leaf.withValues(alpha: 0.15), shape: BoxShape.circle),
-                child: const Icon(Icons.check_rounded, color: AppColors.leaf, size: 64),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0, end: 1),
+                    duration: const Duration(milliseconds: 800),
+                    curve: Curves.elasticOut,
+                    builder: (_, v, c) => Transform.scale(scale: v, child: c),
+                    child: Container(
+                      width: 112,
+                      height: 112,
+                      decoration: BoxDecoration(
+                        color: AppColors.leaf.withValues(alpha: 0.14),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                              color: AppColors.leaf.withValues(alpha: 0.28),
+                              blurRadius: 32,
+                              spreadRadius: 4),
+                        ],
+                      ),
+                      child: const Icon(Icons.check_rounded, color: AppColors.leaf, size: 64),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Text(context.tr('تم استلام طلبك!', 'Order placed!'),
+                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 8),
+                  Text(
+                      context.tr('سنجهز كتبك ونبلغك عند الشحن.\nرقم الطلب ${order.id} • ${money(context, order.total)}',
+                          'We will prepare your books and tell you when they ship.\nOrder ${order.id} • ${money(context, order.total)}'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: context.muted, height: 1.6)),
+                  const SizedBox(height: 40),
+                  FilledButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const OrdersScreen()));
+                    },
+                    child: Text(context.tr('تتبع الطلب', 'Track order')),
+                  ),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(context.tr('العودة للمتجر', 'Back to store')),
+                  ),
+                ],
               ),
-              const SizedBox(height: 24),
-              Text(context.tr('تم استلام طلبك!', 'Order placed!'),
-                  style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w700)),
-              const SizedBox(height: 8),
-              Text(
-                  context.tr('رقم الطلب ${order.id} • الإجمالي ${money(context, order.total)}',
-                      'Order ${order.id} • Total ${money(context, order.total)}'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: context.muted, height: 1.5)),
-              const SizedBox(height: 32),
-              FilledButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => const OrdersScreen()));
-                },
-                child: Text(context.tr('تتبع الطلب', 'Track order')),
-              ),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(context.tr('العودة للمتجر', 'Back to store')),
-              ),
-            ],
+            ),
           ),
-        ),
+          const Positioned.fill(child: Confetti()),
+        ],
       ),
     );
   }
@@ -634,7 +701,11 @@ class OrdersScreen extends StatelessWidget {
               : context.tr('طلباتي', 'My orders'))),
       body: orders.isEmpty
           ? EmptyState(Icons.receipt_long_rounded,
-              context.tr('لا توجد طلبات بعد', 'No orders yet'))
+              context.tr('لا توجد طلبات بعد', 'No orders yet'),
+              subtitle: context.tr('اطلب مذكرات وكتب د. راشيا لتصلك للبيت.',
+                  'Order Dr. Rashia\'s notes and books and get them delivered.'),
+              actionLabel: teacher ? null : context.tr('تصفح المتجر', 'Browse the store'),
+              onAction: () => Navigator.pop(context))
           : ListView(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
               children: [
@@ -648,7 +719,7 @@ class OrdersScreen extends StatelessWidget {
                           Row(children: [
                             Text(o.id,
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w700, fontSize: 15)),
+                                    fontWeight: FontWeight.w700, fontSize: 14)),
                             const Spacer(),
                             Pill(orderStatusLabel(context, o.status),
                                 orderStatusColor(o.status)),
@@ -683,7 +754,7 @@ class OrdersScreen extends StatelessWidget {
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: context.brand,
-                                    fontSize: 16)),
+                                    fontSize: 18)),
                           ]),
                           const SizedBox(height: 12),
                           _OrderTimeline(status: o.status),
@@ -746,14 +817,14 @@ class _OrderTimeline extends StatelessWidget {
                   maxLines: 1,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 10.5, color: context.muted)),
+                  style: TextStyle(fontSize: 12, color: context.muted)),
             ]),
           ),
           if (i < 2)
             Expanded(
               child: Container(
                 height: 3,
-                margin: const EdgeInsets.only(bottom: 18),
+                margin: const EdgeInsets.only(bottom: 20),
                 color: i < idx ? AppColors.leaf : context.line,
               ),
             ),

@@ -85,7 +85,7 @@ class ExamsScreen extends StatelessWidget {
               children: [
                 const Icon(Icons.emoji_events_rounded,
                     color: AppColors.gold, size: 38),
-                const SizedBox(width: 14),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +108,7 @@ class ExamsScreen extends StatelessWidget {
                     Text('${done.length}',
                         style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 22,
+                            fontSize: 28,
                             fontWeight: FontWeight.w700)),
                     Text(context.tr('تم إنجازها', 'completed'),
                         style: TextStyle(
@@ -173,10 +173,10 @@ class _ExamCard extends StatelessWidget {
                 Text('${a.score}/${a.total}',
                     style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 17,
+                        fontSize: 18,
                         color: scoreColor(a.percent))),
                 Text(gradeLetter(context, a.percent),
-                    style: TextStyle(color: context.muted, fontSize: 11.5)),
+                    style: TextStyle(color: context.muted, fontSize: 12)),
               ],
             )
           : Pill(context.tr('بانتظار التصحيح', 'Awaiting grading'),
@@ -192,7 +192,7 @@ class _ExamCard extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: AppCard(
         onTap: () {
           if (a != null) {
@@ -216,14 +216,14 @@ class _ExamCard extends StatelessWidget {
                     ? Icons.bolt_rounded
                     : Icons.assignment_rounded,
                 AppColors.violet),
-            const SizedBox(width: 14),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(exam.title.of(context),
                       style: const TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 15)),
+                          fontWeight: FontWeight.w700, fontSize: 14)),
                   const SizedBox(height: 4),
                   Text(
                       '${examKindLabel(context, exam.kind)} • ${fmtDate(context, exam.date)} • ${exam.durationMin} ${context.tr('د', 'min')} • $total ${context.tr('درجة', 'marks')}',
@@ -249,8 +249,8 @@ class _ExamCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(exam.title.of(ctx),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 14),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 16),
           _Rule(Icons.timer_outlined,
               ctx.tr('المدة ${exam.durationMin} دقيقة', 'Duration ${exam.durationMin} minutes')),
           _Rule(Icons.checklist_rounded,
@@ -259,7 +259,7 @@ class _ExamCard extends StatelessWidget {
               ctx.tr('يُسلَّم الامتحان تلقائياً عند انتهاء الوقت', 'Auto-submits when time is up')),
           _Rule(Icons.edit_note_rounded,
               ctx.tr('تصحح د. راشيا الأسئلة المقالية يدوياً', 'Dr. Rashia grades written answers manually')),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           FilledButton(
             onPressed: () {
               Navigator.pop(ctx);
@@ -285,10 +285,10 @@ class _Rule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(children: [
         Icon(icon, size: 20, color: context.brand),
-        const SizedBox(width: 10),
+        const SizedBox(width: 12),
         Expanded(child: Text(text)),
       ]),
     );
@@ -407,11 +407,11 @@ class _ExamTakeScreenState extends State<ExamTakeScreen> {
           leading: IconButton(
               onPressed: _exit, icon: const Icon(Icons.close_rounded)),
           title: Text(widget.exam.title.of(context),
-              style: const TextStyle(fontSize: 16)),
+              style: const TextStyle(fontSize: 18)),
           actions: [
             Container(
               margin: const EdgeInsetsDirectional.only(end: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 color: (low ? AppColors.coral : AppColors.primary)
                     .withValues(alpha: 0.12),
@@ -439,11 +439,11 @@ class _ExamTakeScreenState extends State<ExamTakeScreen> {
             ),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(20),
                 children: [
                   Wrap(
                     spacing: 8,
-                    runSpacing: 6,
+                    runSpacing: 8,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Pill(
@@ -460,15 +460,15 @@ class _ExamTakeScreenState extends State<ExamTakeScreen> {
                               color: context.muted, fontWeight: FontWeight.w700)),
                     ],
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   Text(q.text.of(context),
                       style: const TextStyle(
-                          fontSize: 19, fontWeight: FontWeight.w700, height: 1.5)),
+                          fontSize: 18, fontWeight: FontWeight.w700, height: 1.5)),
                   const SizedBox(height: 20),
                   if (q.type == QType.mcq)
                     for (var i = 0; i < q.options.length; i++)
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 12),
                         child: _OptionTile(
                           letter: String.fromCharCode(65 + i),
                           text: q.options[i].of(context),
@@ -491,7 +491,7 @@ class _ExamTakeScreenState extends State<ExamTakeScreen> {
             SafeArea(
               top: false,
               child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                 decoration: BoxDecoration(
                   color: context.card,
                   border: Border(top: BorderSide(color: context.line)),
@@ -535,10 +535,10 @@ class _ExamTakeScreenState extends State<ExamTakeScreen> {
         children: [
           Text(ctx.tr('خريطة الأسئلة', 'Question map'),
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Wrap(
-            spacing: 10,
-            runSpacing: 10,
+            spacing: 12,
+            runSpacing: 12,
             children: [
               for (var i = 0; i < _qs.length; i++)
                 GestureDetector(
@@ -599,7 +599,7 @@ class _OptionTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               Container(
@@ -621,7 +621,7 @@ class _OptionTile extends StatelessWidget {
               Expanded(
                   child: Text(text,
                       style: const TextStyle(
-                          fontSize: 15.5, fontWeight: FontWeight.w600))),
+                          fontSize: 14, fontWeight: FontWeight.w700))),
             ],
           ),
         ),
@@ -646,53 +646,132 @@ class ExamResultScreen extends StatelessWidget {
     final exam = s.exam(examId);
     final a = s.attemptOf(examId, studentId)!;
     final color = a.graded ? scoreColor(a.percent) : AppColors.amber;
+    final target =
+        a.graded ? a.percent : a.mcqScore / (a.total == 0 ? 1 : a.total);
+    final isStudent = s.me!.role == UserRole.student;
+    final p = a.percent;
+
+    // Warm, proportional feedback (celebrate wins, encourage after misses).
+    final (IconData badge, String headline, String body) = !a.graded
+        ? (
+            Icons.hourglass_top_rounded,
+            context.tr('تم التسليم!', 'Submitted!'),
+            context.tr('ستصحح د. راشيا الأسئلة المقالية قريباً وسيصلك إشعار بالنتيجة.',
+                'Dr. Rashia will grade your written answers soon. We will notify you.')
+          )
+        : p >= 0.85
+            ? (
+                Icons.emoji_events_rounded,
+                context.tr('أداء رائع!', 'Outstanding!'),
+                context.tr('أتقنت هذا الدرس. استمر على هذا المستوى.',
+                    'You have mastered this one. Keep it up.')
+              )
+            : p >= 0.65
+                ? (
+                    Icons.thumb_up_alt_rounded,
+                    context.tr('عمل جيد!', 'Great job!'),
+                    context.tr('أنت قريب جداً من الدرجة الكاملة. راجع الأخطاء وحاول التدريب.',
+                        'You are close. Review the mistakes and practise a little more.')
+                  )
+                : p >= 0.5
+                    ? (
+                        Icons.trending_up_rounded,
+                        context.tr('بداية جيدة', 'Good start'),
+                        context.tr('بقليل من التدريب ستتحسن بسرعة. ابدأ بالأسئلة التي أخطأت فيها.',
+                            'A little practice will lift this fast. Start with the questions you missed.')
+                      )
+                    : (
+                        Icons.psychology_alt_rounded,
+                        context.tr('لا تقلق', 'Do not worry'),
+                        context.tr('كل خطأ فرصة للتعلم. راجع الشرح ثم جرّب بنك الأسئلة.',
+                            'Every mistake is a chance to learn. Read the explanations, then try the question bank.')
+                      );
 
     return Scaffold(
       appBar: AppBar(title: Text(exam.title.of(context))),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
+      body: Stack(
         children: [
-          AppCard(
-            child: Column(
-              children: [
-                ProgressRing(
-                  value: a.graded ? a.percent : a.mcqScore / (a.total == 0 ? 1 : a.total),
-                  color: color,
-                  size: 130,
-                  stroke: 13,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(a.graded ? '${a.score}' : '${a.mcqScore}+',
-                          style: const TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w700)),
-                      Text('/ ${a.total}',
-                          style: TextStyle(color: context.muted)),
+          ListView(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+            children: [
+              AppCard(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0, end: target),
+                      duration: const Duration(milliseconds: 1300),
+                      curve: Curves.easeOutCubic,
+                      builder: (_, v, __) => ProgressRing(
+                        value: v,
+                        color: color,
+                        size: 144,
+                        stroke: 12,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                                '${(v * (a.total == 0 ? 1 : a.total)).round()}${a.graded ? '' : '+'}',
+                                style: const TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w700,
+                                    fontFeatures: [FontFeature.tabularFigures()])),
+                            Directionality(
+                              textDirection: TextDirection.ltr,
+                              child: Text('/ ${a.total}',
+                                  style: TextStyle(color: context.muted, fontSize: 12)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(badge, color: color, size: 24),
+                        const SizedBox(width: 8),
+                        Text(headline,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w700, color: color)),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(body,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: context.muted, height: 1.5)),
+                    if (a.graded) ...[
+                      const SizedBox(height: 12),
+                      Pill('${(a.percent * 100).round()}%  •  ${gradeLetter(context, a.percent)}', color),
                     ],
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 14),
-                Text(
-                    a.graded
-                        ? gradeLetter(context, a.percent)
-                        : context.tr('بانتظار تصحيح الأسئلة المقالية', 'Written answers awaiting grading'),
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w700, color: color)),
-                const SizedBox(height: 4),
-                Text(
-                    a.graded
-                        ? context.tr('${(a.percent * 100).round()}% • ${fmtDateYear(context, a.at)}', '${(a.percent * 100).round()}% • ${fmtDateYear(context, a.at)}')
-                        : context.tr('الدرجة الحالية من الاختيار من متعدد: ${a.mcqScore}', 'Auto-graded MCQ score: ${a.mcqScore}'),
-                    style: TextStyle(color: context.muted)),
+              ),
+              if (isStudent) ...[
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const QuestionBankScreen())),
+                  icon: const Icon(Icons.fitness_center_rounded),
+                  label: Text(context.tr('تدرّب على أسئلة مشابهة', 'Practise similar questions')),
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(context.tr('العودة للامتحانات', 'Back to exams')),
+                ),
               ],
-            ),
+              SectionHeader(context.tr('مراجعة الإجابات', 'Answer review')),
+              for (var i = 0; i < exam.questionIds.length; i++)
+                _ReviewCard(
+                    index: i + 1,
+                    q: s.question(exam.questionIds[i]),
+                    answer: a.answers[exam.questionIds[i]]),
+            ],
           ),
-          SectionHeader(context.tr('مراجعة الإجابات', 'Answer review')),
-          for (var i = 0; i < exam.questionIds.length; i++)
-            _ReviewCard(
-                index: i + 1,
-                q: s.question(exam.questionIds[i]),
-                answer: a.answers[exam.questionIds[i]]),
+          if (a.graded && p >= 0.85) const Positioned.fill(child: Confetti()),
         ],
       ),
     );
@@ -717,14 +796,14 @@ class _ReviewCard extends StatelessWidget {
                 : AppColors.coral)
         : AppColors.sky;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: AppCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(children: [
               Avatar('$index', color, radius: 14),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text(q.text.of(context),
                     style: const TextStyle(
@@ -741,7 +820,7 @@ class _ReviewCard extends StatelessWidget {
               if (q.explanation.ar.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                       color: context.brandSoft,
                       borderRadius: BorderRadius.circular(12)),
@@ -751,7 +830,7 @@ class _ReviewCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                         child: Text(q.explanation.of(context),
-                            style: const TextStyle(fontSize: 12.5, height: 1.5))),
+                            style: const TextStyle(fontSize: 12, height: 1.5))),
                   ]),
                 ),
               ],
@@ -774,21 +853,21 @@ class _ReviewCard extends StatelessWidget {
 
   Widget _line(BuildContext context, String label, String value, Color color) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
               width: 4,
               height: 36,
-              margin: const EdgeInsetsDirectional.only(end: 10),
+              margin: const EdgeInsetsDirectional.only(end: 12),
               decoration: BoxDecoration(
                   color: color, borderRadius: BorderRadius.circular(4))),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: TextStyle(color: context.muted, fontSize: 11.5)),
+                Text(label, style: TextStyle(color: context.muted, fontSize: 12)),
                 Text(value, style: const TextStyle(fontWeight: FontWeight.w700, height: 1.4)),
               ],
             ),

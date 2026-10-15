@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen>
                           fontSize: 28,
                           fontWeight: FontWeight.w700),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
                     Text(
                       context.tr('علم الأحياء • الثانوية العامة',
                           'Biology • Egyptian Secondary School'),

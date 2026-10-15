@@ -645,6 +645,7 @@ class Seed {
           end: now.subtract(const Duration(days: 7)),
           source: SubSource.code),
     ]);
+    s.lessonProgress['s1'] = {'l5': 1.0, 'l6': 0.4};
     s.codes.addAll([
       ActivationCode(code: 'BIO1-TERM', planId: 'term', grade: 1, created: now.subtract(const Duration(days: 3))),
       ActivationCode(code: 'BIO2-MNTH', planId: 'monthly', grade: 2, created: now.subtract(const Duration(days: 3))),

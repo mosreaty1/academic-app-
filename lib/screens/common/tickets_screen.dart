@@ -69,7 +69,7 @@ class _TicketsScreenState extends State<TicketsScreen> {
               label: Text(context.tr('تذكرة جديدة', 'New ticket')),
             ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 92),
         children: [
           ChipSelector<TicketStatus?>(
             values: [null, ...TicketStatus.values],
@@ -81,37 +81,39 @@ class _TicketsScreenState extends State<TicketsScreen> {
           if (list.isEmpty)
             EmptyState(Icons.support_agent_rounded,
                 context.tr('لا توجد تذاكر', 'No tickets'),
-                subtitle: context.tr('اضغط "تذكرة جديدة" للتواصل مع د. راشيا',
-                    'Tap "New ticket" to contact Dr. Rashia')),
+                subtitle: context.tr('عندك سؤال أو عذر غياب؟ اكتب لد. راشيا وسترد عليك.',
+                    'Have a question or an absence excuse? Write to Dr. Rashia and she will reply.'),
+                actionLabel: teacher ? null : context.tr('تذكرة جديدة', 'New ticket'),
+                onAction: () => showSheet(context, (_) => const _NewTicketForm())),
           for (final t in list)
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 12),
               child: AppCard(
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => TicketDetailScreen(ticket: t))),
                 child: Row(children: [
                   IconBadge(_catIcon(t.category), ticketStatusColor(t.status)),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(t.subject,
                             style: const TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 15)),
-                        const SizedBox(height: 3),
+                                fontWeight: FontWeight.w700, fontSize: 14)),
+                        const SizedBox(height: 4),
                         Text(
                             teacher
                                 ? '${s.user(t.authorId).name.of(context)} • ${t.id}'
                                 : '${_catLabel(context, t.category)} • ${t.id}',
                             style: TextStyle(color: context.muted, fontSize: 12)),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 4),
                         Text(
                             t.messages.last.text,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: context.muted, fontSize: 12.5)),
+                            style: TextStyle(color: context.muted, fontSize: 12)),
                       ],
                     ),
                   ),
@@ -119,9 +121,9 @@ class _TicketsScreenState extends State<TicketsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Pill(ticketStatusLabel(context, t.status), ticketStatusColor(t.status)),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 8),
                       Text(timeAgo(context, t.messages.last.at),
-                          style: TextStyle(color: context.muted, fontSize: 11)),
+                          style: TextStyle(color: context.muted, fontSize: 12)),
                     ],
                   ),
                 ]),
@@ -158,15 +160,15 @@ class _NewTicketFormState extends State<_NewTicketForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('تذكرة جديدة', 'New support ticket'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 14),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 16),
         ChipSelector<String>(
           values: _cats,
           selected: _cat,
           label: (c) => _catLabel(context, c),
           onChanged: (c) => setState(() => _cat = c),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         LabeledField(context.tr('الموضوع', 'Subject'), _subject),
         LabeledField(context.tr('التفاصيل', 'Details'), _body, maxLines: 4),
         FilledButton(
@@ -264,7 +266,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
             SafeArea(
               top: false,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
                 child: Row(children: [
                   Expanded(
                     child: TextField(
@@ -308,7 +310,7 @@ class _Bubble extends StatelessWidget {
     return Align(
       alignment: mine ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
         constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.76),
         decoration: BoxDecoration(
@@ -321,12 +323,12 @@ class _Bubble extends StatelessWidget {
           children: [
             if (msg.staff && !mine)
               Padding(
-                padding: const EdgeInsets.only(bottom: 3),
+                padding: const EdgeInsets.only(bottom: 4),
                 child: Text(context.tr('د. راشيا', 'Dr. Rashia'),
                     style: TextStyle(
                         color: context.brand,
                         fontWeight: FontWeight.w700,
-                        fontSize: 11.5)),
+                        fontSize: 12)),
               ),
             Text(msg.text,
                 style: TextStyle(
@@ -334,7 +336,7 @@ class _Bubble extends StatelessWidget {
             const SizedBox(height: 4),
             Text(timeAgo(context, msg.at),
                 style: TextStyle(
-                    fontSize: 10.5,
+                    fontSize: 12,
                     color: mine ? Colors.white70 : context.muted)),
           ],
         ),
