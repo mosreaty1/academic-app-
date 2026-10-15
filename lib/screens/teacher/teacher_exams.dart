@@ -75,7 +75,7 @@ class _ExamList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(e.title.of(context),
-                            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
                         const SizedBox(height: 3),
                         Text(
                             '${gradeShort(context, e.grade)} • ${fmtDate(context, e.date)} • ${e.questionIds.length} ${context.tr('سؤال', 'Q')} • ${s.examTotal(e)} ${context.tr('درجة', 'marks')}',
@@ -173,7 +173,7 @@ class ExamDetailScreen extends StatelessWidget {
                     else
                       Text('${a.score}/${a.total}',
                           style: TextStyle(
-                              fontWeight: FontWeight.w800, color: scoreColor(a.percent))),
+                              fontWeight: FontWeight.w700, color: scoreColor(a.percent))),
                   ]),
                 ),
               );
@@ -215,7 +215,7 @@ class _GradeAttemptSheetState extends State<GradeAttemptSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(st.name.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
         Text(e.title.of(context), style: TextStyle(color: context.muted)),
         const SizedBox(height: 14),
         Row(children: [
@@ -229,7 +229,7 @@ class _GradeAttemptSheetState extends State<GradeAttemptSheet> {
           Text(context.tr('لا توجد أسئلة مقالية في هذا الامتحان.', 'No written questions in this exam.')),
         for (final q in written) ...[
           const Divider(height: 24),
-          Text(q.text.of(context), style: const TextStyle(fontWeight: FontWeight.w800, height: 1.4)),
+          Text(q.text.of(context), style: const TextStyle(fontWeight: FontWeight.w700, height: 1.4)),
           const SizedBox(height: 8),
           Container(
             width: double.infinity,

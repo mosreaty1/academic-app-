@@ -94,7 +94,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                 ? context.tr('لا يوجد اشتراك', 'No subscription')
                                 : context.tr('انتهى الاشتراك', 'Subscription expired'),
                         style: const TextStyle(
-                            color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800)),
+                            color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 2),
                     Text(
                         sub == null
@@ -162,7 +162,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(AppState.plan(h.planId).name.of(context),
-                              style: const TextStyle(fontWeight: FontWeight.w800)),
+                              style: const TextStyle(fontWeight: FontWeight.w700)),
                           Text(
                               '${fmtDate(context, h.start)} → ${fmtDate(context, h.end)} • ${subSourceLabel(context, h.source)}',
                               style: TextStyle(color: context.muted, fontSize: 12)),
@@ -209,7 +209,7 @@ class _PlanCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(plan.name.of(context),
-                        style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
                     Text(plan.perk.of(context),
                         style: TextStyle(color: context.muted, fontSize: 12.5)),
                     const SizedBox(height: 2),
@@ -223,7 +223,7 @@ class _PlanCard extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                 Text(money(context, plan.price),
                     style: TextStyle(
-                        fontWeight: FontWeight.w800, fontSize: 17, color: context.brand)),
+                        fontWeight: FontWeight.w700, fontSize: 17, color: context.brand)),
                 const SizedBox(height: 4),
                 Icon(Icons.chevron_right_rounded, color: context.muted),
               ]),
@@ -240,7 +240,7 @@ class _PlanCard extends StatelessWidget {
                   color: AppColors.amber, borderRadius: BorderRadius.circular(12)),
               child: Text(context.tr('الأكثر توفيراً', 'Best value'),
                   style: const TextStyle(
-                      color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800)),
+                      color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700)),
             ),
           ),
       ],
@@ -268,7 +268,7 @@ class _CheckoutSheetState extends State<_CheckoutSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('تأكيد الاشتراك', 'Confirm subscription'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 12),
         AppCard(
           child: Row(children: [
@@ -276,7 +276,7 @@ class _CheckoutSheetState extends State<_CheckoutSheet> {
                 child: Text('${p.name.of(context)} • ${p.perk.of(context)}',
                     style: const TextStyle(fontWeight: FontWeight.w700))),
             Text(money(context, p.price),
-                style: TextStyle(fontWeight: FontWeight.w800, color: context.brand)),
+                style: TextStyle(fontWeight: FontWeight.w700, color: context.brand)),
           ]),
         ),
         const SizedBox(height: 12),

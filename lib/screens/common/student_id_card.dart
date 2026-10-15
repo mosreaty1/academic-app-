@@ -19,20 +19,20 @@ class StudentIdCard extends StatelessWidget {
     final on = s.hasAccess(student.id);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         gradient: const LinearGradient(
-            colors: [AppColors.primary, AppColors.primaryDark],
+            colors: [Color(0xFF0D7561), AppColors.primaryDark],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight),
         boxShadow: [
           BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.3),
-              blurRadius: 20,
-              offset: const Offset(0, 8))
+              color: AppColors.primaryDark.withValues(alpha: 0.28),
+              blurRadius: 24,
+              offset: const Offset(0, 10))
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         child: CustomPaint(
           painter: BioPatternPainter(Colors.white),
           child: Padding(
@@ -41,73 +41,125 @@ class StudentIdCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(children: [
-                  const Icon(Icons.biotech_rounded, color: Colors.white, size: 20),
-                  const SizedBox(width: 6),
+                  Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(9)),
+                    child: const Icon(Icons.biotech_rounded, color: Colors.white, size: 18),
+                  ),
+                  const SizedBox(width: 10),
                   Expanded(
-                    child: Text(context.tr('أكاديمية د. راشيا', 'Dr. Rashia Academy'),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12.5)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(context.tr('أكاديمية د. راشيا', 'Dr. Rashia Academy'),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13)),
+                        Text(context.tr('بطاقة الطالب', 'STUDENT CARD'),
+                            style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.65),
+                                fontSize: 10,
+                                letterSpacing: 1.2)),
+                      ],
+                    ),
                   ),
                   const SizedBox(width: 8),
-                  Pill(on ? context.tr('مشترك', 'Subscribed') : context.tr('غير مشترك', 'Free'),
-                      on ? AppColors.amber : Colors.white),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: on ? AppColors.gold : Colors.white.withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Icon(on ? Icons.workspace_premium_rounded : Icons.lock_outline_rounded,
+                          size: 13, color: Colors.white),
+                      const SizedBox(width: 4),
+                      Text(on ? context.tr('مشترك', 'Premium') : context.tr('مجاني', 'Free'),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700)),
+                    ]),
+                  ),
                 ]),
-                const SizedBox(height: 16),
+                const SizedBox(height: 22),
                 Row(children: [
-                  Avatar(student.name.initialOf(context), Colors.white.withValues(alpha: 0.28),
-                      radius: 28),
+                  Avatar(student.name.initialOf(context), Colors.white.withValues(alpha: 0.22),
+                      radius: 26),
                   const SizedBox(width: 14),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(student.name.of(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 19, fontWeight: FontWeight.w800)),
+                                color: Colors.white, fontSize: 19, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 2),
                         Text('${gradeName(context, student.grade)} • ${student.section}',
-                            style: TextStyle(color: Colors.white.withValues(alpha: 0.85))),
+                            style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.78), fontSize: 12.5)),
                       ],
                     ),
                   ),
                 ]),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
                   decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.16),
-                      borderRadius: BorderRadius.circular(14)),
+                    color: Colors.black.withValues(alpha: 0.20),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                  ),
                   child: Row(children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(context.tr('كود الطالب', 'STUDENT ID'),
-                            style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.75),
-                                fontSize: 10.5,
-                                letterSpacing: 1)),
-                        Directionality(
-                          textDirection: TextDirection.ltr,
-                          child: Text(student.code,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 1.5)),
-                        ),
-                      ],
+                    Container(
+                      width: 34,
+                      height: 26,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        gradient: const LinearGradient(
+                            colors: [Color(0xFFE6C36A), Color(0xFFB88A2A)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight),
+                      ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(context.tr('كود الطالب', 'STUDENT ID'),
+                              style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.6),
+                                  fontSize: 9.5,
+                                  letterSpacing: 1.2)),
+                          Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Text(student.code,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 2)),
+                          ),
+                        ],
+                      ),
+                    ),
                     IconButton(
                       tooltip: context.tr('نسخ', 'Copy'),
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: student.code));
                         toast(context, context.tr('تم نسخ الكود', 'ID copied'));
                       },
-                      icon: const Icon(Icons.copy_rounded, color: Colors.white),
+                      icon: Icon(Icons.copy_rounded,
+                          color: Colors.white.withValues(alpha: 0.85), size: 19),
                     ),
                   ]),
                 ),

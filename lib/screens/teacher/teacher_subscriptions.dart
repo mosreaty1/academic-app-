@@ -105,7 +105,7 @@ class _SubscribersState extends State<_Subscribers> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(u.name.of(context),
-                            style: const TextStyle(fontWeight: FontWeight.w800)),
+                            style: const TextStyle(fontWeight: FontWeight.w700)),
                         Text('${u.code} • ${gradeShort(context, u.grade)}',
                             style: TextStyle(color: context.muted, fontSize: 12)),
                       ],
@@ -140,11 +140,11 @@ class _ActivateSheet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(student.name.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
         Text(student.code, style: TextStyle(color: context.muted)),
         const SizedBox(height: 14),
         Text(context.tr('تفعيل / تمديد يدوي', 'Activate / extend manually'),
-            style: const TextStyle(fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontWeight: FontWeight.w700)),
         const SizedBox(height: 10),
         for (final p in AppState.plans)
           Padding(
@@ -195,7 +195,7 @@ class _Codes extends StatelessWidget {
                         textDirection: TextDirection.ltr,
                         child: Text(c.code,
                             style: TextStyle(
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w700,
                                 fontSize: 17,
                                 letterSpacing: 1.2,
                                 decoration: c.used ? TextDecoration.lineThrough : null,
@@ -244,7 +244,7 @@ class _GenerateSheetState extends State<_GenerateSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إنشاء أكواد تفعيل', 'Generate activation codes'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
         ChipSelector<String>(
           values: AppState.plans.map((p) => p.id).toList(),

@@ -54,7 +54,7 @@ class StudentHome extends StatelessWidget {
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
-                                fontWeight: FontWeight.w800)),
+                                fontWeight: FontWeight.w700)),
                       ],
                     ),
                   ),
@@ -96,10 +96,17 @@ class StudentHome extends StatelessWidget {
                     child: AppCard(
                       onTap: () => onTab(2),
                       gradient: const LinearGradient(
-                          colors: [AppColors.violet, Color(0xFF5A3FA0)]),
+                          colors: [Color(0xFF1B3A32), Color(0xFF0E241F)]),
                       border: false,
                       child: Row(children: [
-                        const Icon(Icons.alarm_on_rounded, color: Colors.white, size: 36),
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                              color: AppColors.gold.withValues(alpha: 0.18),
+                              borderRadius: BorderRadius.circular(13)),
+                          child: const Icon(Icons.alarm_on_rounded, color: AppColors.gold, size: 24),
+                        ),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Column(
@@ -112,7 +119,7 @@ class StudentHome extends StatelessWidget {
                               Text(e.title.of(context),
                                   style: const TextStyle(
                                       color: Colors.white,
-                                      fontWeight: FontWeight.w800,
+                                      fontWeight: FontWeight.w700,
                                       fontSize: 16)),
                             ],
                           ),
@@ -135,7 +142,7 @@ class StudentHome extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(context.tr('افتح كل الدروس المدفوعة', 'Unlock all premium lessons'),
-                                  style: const TextStyle(fontWeight: FontWeight.w800)),
+                                  style: const TextStyle(fontWeight: FontWeight.w700)),
                               Text(context.tr('اشترك أو فعّل كود الاشتراك', 'Subscribe or redeem a code'),
                                   style: TextStyle(color: context.muted, fontSize: 12.5)),
                             ],
@@ -209,27 +216,6 @@ class _HeroStat extends StatelessWidget {
   const _HeroStat({required this.value, required this.label, required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(18)),
-          child: Column(children: [
-            Text(value,
-                style: const TextStyle(
-                    color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 2),
-            Text(label,
-                style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.85), fontSize: 11.5)),
-          ]),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      HeroStat(value: value, label: label, onTap: onTap);
 }

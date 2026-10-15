@@ -75,7 +75,7 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
                   Expanded(
                     child: Column(children: [
                       Text(fmtDateFull(context, _date),
-                          style: const TextStyle(fontWeight: FontWeight.w800)),
+                          style: const TextStyle(fontWeight: FontWeight.w700)),
                       if (isToday)
                         Text(context.tr('اليوم', 'Today'),
                             style: TextStyle(color: context.brand, fontSize: 12)),
@@ -110,7 +110,7 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(st.name.of(context),
-                                style: const TextStyle(fontWeight: FontWeight.w800)),
+                                style: const TextStyle(fontWeight: FontWeight.w700)),
                           ),
                           Text(st.section,
                               style: TextStyle(color: context.muted, fontSize: 12)),
@@ -191,7 +191,7 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
         child: Column(children: [
           Text('$n',
               style: TextStyle(
-                  fontWeight: FontWeight.w800, fontSize: 17, color: attColor(t))),
+                  fontWeight: FontWeight.w700, fontSize: 17, color: attColor(t))),
           Text(attLabel(context, t),
               style: TextStyle(fontSize: 10.5, color: attColor(t))),
         ]),
@@ -224,7 +224,7 @@ class _StatusBtn extends StatelessWidget {
           child: Text(attLabel(context, status),
               style: TextStyle(
                   fontSize: 11.5,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   color: selected ? Colors.white : context.muted)),
         ),
       ),

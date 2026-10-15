@@ -77,7 +77,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(u.name.of(context),
-                              style: const TextStyle(fontWeight: FontWeight.w800)),
+                              style: const TextStyle(fontWeight: FontWeight.w700)),
                           Text('${u.code} • ${gradeShort(context, u.grade)}',
                               style: TextStyle(color: context.muted, fontSize: 12)),
                         ],
@@ -92,7 +92,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
                         if (avg != null)
                           Text('${(avg * 100).round()}%',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w700,
                                   color: scoreColor(avg),
                                   fontSize: 12)),
                       ],
@@ -211,7 +211,7 @@ class _AddStudentFormState extends State<_AddStudentForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إضافة طالب جديد', 'Add a new student'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 4),
         Text(context.tr('سيتم إنشاء كود الطالب وكلمة المرور تلقائياً', 'The Student ID and password are generated automatically'),
             style: TextStyle(color: context.muted, fontSize: 12.5)),
@@ -266,12 +266,12 @@ class _CredentialsDialog extends StatelessWidget {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
       title: Text(context.tr('تم إنشاء الحساب','Account created'),
-          style: const TextStyle(fontWeight: FontWeight.w800)),
+          style: const TextStyle(fontWeight: FontWeight.w700)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(student.name.of(context), style: const TextStyle(fontWeight: FontWeight.w800)),
+          Text(student.name.of(context), style: const TextStyle(fontWeight: FontWeight.w700)),
           const SizedBox(height: 10),
           _row(context, context.tr('كود الطالب', 'Student ID'), student.code),
           _row(context, context.tr('كلمة المرور', 'Password'), password),
@@ -306,7 +306,7 @@ class _CredentialsDialog extends StatelessWidget {
           Directionality(
             textDirection: TextDirection.ltr,
             child: SelectableText(v,
-                style: const TextStyle(fontWeight: FontWeight.w800, letterSpacing: 1)),
+                style: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 1)),
           ),
         ]),
       );

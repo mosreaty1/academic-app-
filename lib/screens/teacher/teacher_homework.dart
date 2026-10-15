@@ -41,7 +41,7 @@ class TeacherHomeworkScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(h.title.of(context),
-                              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
                           const SizedBox(height: 3),
                           Text(
                               '${gradeShort(context, h.grade)} • ${context.tr('الموعد', 'Due')} ${fmtDate(context, h.due)}',
@@ -129,7 +129,7 @@ class HomeworkDetailScreen extends StatelessWidget {
                     else
                       Text('${sub.mark}/${h.maxMarks}',
                           style: const TextStyle(
-                              fontWeight: FontWeight.w800, color: AppColors.leaf)),
+                              fontWeight: FontWeight.w700, color: AppColors.leaf)),
                   ]),
                 ),
               );
@@ -168,7 +168,7 @@ class _GradeSheetState extends State<_GradeSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(st.name.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
         Text(timeAgo(context, widget.sub.at), style: TextStyle(color: context.muted)),
         const SizedBox(height: 12),
         Container(
@@ -234,7 +234,7 @@ class _CreateHomeworkFormState extends State<_CreateHomeworkForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('واجب جديد', 'New homework'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
         LabeledField(context.tr('العنوان', 'Title'), _title),
         LabeledField(context.tr('التعليمات', 'Instructions'), _desc, maxLines: 3),

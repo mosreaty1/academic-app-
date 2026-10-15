@@ -82,7 +82,7 @@ class ParentHome extends StatelessWidget {
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
-                                fontWeight: FontWeight.w800)),
+                                fontWeight: FontWeight.w700)),
                       ],
                     ),
                   ),
@@ -115,7 +115,7 @@ class ParentHome extends StatelessWidget {
                                   children: [
                                     Text(c.name.of(context),
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w800,
+                                            fontWeight: FontWeight.w700,
                                             color: c.id == kid.id
                                                 ? AppColors.ink
                                                 : Colors.white)),
@@ -139,7 +139,7 @@ class ParentHome extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(kid.name.of(context),
                         style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w800)),
+                            color: Colors.white, fontWeight: FontWeight.w700)),
                   ]),
                 const SizedBox(height: 18),
                 Row(children: [
@@ -225,28 +225,8 @@ class _Stat extends StatelessWidget {
   const _Stat(this.value, this.label, this.onTap);
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(18)),
-          child: Column(children: [
-            Text(value,
-                style: const TextStyle(
-                    color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 2),
-            Text(label,
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 11.5)),
-          ]),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      HeroStat(value: value, label: label, onTap: onTap);
 }
 
 /// Wrapper that keeps the parent's tab pages in sync with the selected child.

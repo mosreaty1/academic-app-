@@ -109,7 +109,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
           child: Center(
             child: Text(label,
                 style: TextStyle(
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                     color: sel ? Colors.white : context.muted)),
           ),
         ),
@@ -142,7 +142,7 @@ class _HwCard extends StatelessWidget {
               children: [
                 Text(hw.title.of(context),
                     style: const TextStyle(
-                        fontWeight: FontWeight.w800, fontSize: 15)),
+                        fontWeight: FontWeight.w700, fontSize: 15)),
                 const SizedBox(height: 3),
                 Text(hw.chapter.of(context),
                     style: TextStyle(color: context.muted, fontSize: 12)),
@@ -168,7 +168,7 @@ class _HwCard extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text('${sub!.mark}/${hw.maxMarks}',
                     style: TextStyle(
-                        fontWeight: FontWeight.w800, color: color)),
+                        fontWeight: FontWeight.w700, color: color)),
               ],
             ],
           ),
@@ -209,7 +209,7 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(hw.title.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
         const SizedBox(height: 6),
         Wrap(spacing: 8, children: [
           Pill(hw.chapter.of(context), AppColors.primary),
@@ -232,7 +232,7 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
                     context.tr('تم التسليم ${timeAgo(context, sub.at)}',
                         'Submitted ${timeAgo(context, sub.at)}'),
                     style: TextStyle(
-                        color: context.brand, fontWeight: FontWeight.w800)),
+                        color: context.brand, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 6),
                 Text(sub.text),
                 if (sub.mark != null) ...[
@@ -241,7 +241,7 @@ class _HomeworkSheetState extends State<HomeworkSheet> {
                       context.tr('الدرجة: ${sub.mark}/${hw.maxMarks}',
                           'Mark: ${sub.mark}/${hw.maxMarks}'),
                       style: const TextStyle(
-                          fontWeight: FontWeight.w800, fontSize: 16)),
+                          fontWeight: FontWeight.w700, fontSize: 16)),
                   if (sub.feedback.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(sub.feedback),

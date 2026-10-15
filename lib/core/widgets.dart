@@ -53,7 +53,7 @@ Future<bool> confirm(BuildContext context, String title, String body,
     context: context,
     builder: (ctx) => AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
       content: Text(body),
       actions: [
         TextButton(
@@ -88,7 +88,7 @@ class AppCard extends StatelessWidget {
     this.onTap,
     this.color,
     this.gradient,
-    this.radius = 20,
+    this.radius = 18,
     this.border = true,
   });
 
@@ -104,9 +104,10 @@ class AppCard extends StatelessWidget {
         border: border ? Border.all(color: context.line) : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: context.isDark ? 0.25 : 0.04),
-            blurRadius: 18,
-            offset: const Offset(0, 6),
+            color: const Color(0xFF0B2A23)
+                .withValues(alpha: context.isDark ? 0.30 : 0.045),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -131,27 +132,42 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 22, 4, 10),
+      padding: const EdgeInsets.fromLTRB(2, 26, 2, 12),
       child: Row(
         children: [
           Expanded(
             child: Text(title,
                 style: context.theme.textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w800)),
+                    ?.copyWith(fontWeight: FontWeight.w700, letterSpacing: -0.1)),
           ),
           if (action != null)
-            GestureDetector(
+            InkWell(
+              borderRadius: BorderRadius.circular(8),
               onTap: onAction,
-              child: Text(action!,
-                  style: TextStyle(
-                      color: context.brand,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                child: Text(action!,
+                    style: TextStyle(
+                        color: context.brand,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13)),
+              ),
             ),
         ],
       ),
     );
   }
+}
+
+/// Maps any accent to one of four curated tones so icons read as one family:
+/// brand teal, gold, indigo and terracotta.
+Color toneOf(BuildContext context, Color c) {
+  final h = HSLColor.fromColor(c).hue;
+  final dark = context.isDark;
+  if (h >= 85 && h < 195) return dark ? const Color(0xFF4FC29B) : AppColors.primary;
+  if (h >= 20 && h < 85) return dark ? const Color(0xFFE2B04A) : const Color(0xFFB8821F);
+  if (h >= 195 && h < 290) return dark ? const Color(0xFF8394E0) : const Color(0xFF4A5FB0);
+  return dark ? const Color(0xFFE48479) : const Color(0xFFB9574B);
 }
 
 class IconBadge extends StatelessWidget {
@@ -162,14 +178,15 @@ class IconBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = toneOf(context, color);
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: color.withValues(alpha: context.isDark ? 0.22 : 0.13),
-        borderRadius: BorderRadius.circular(size * 0.32),
+        color: c.withValues(alpha: context.isDark ? 0.18 : 0.10),
+        borderRadius: BorderRadius.circular(size * 0.30),
       ),
-      child: Icon(icon, color: color, size: size * 0.5),
+      child: Icon(icon, color: c, size: size * 0.48),
     );
   }
 }
@@ -183,10 +200,10 @@ class Pill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: context.isDark ? 0.22 : 0.12),
-        borderRadius: BorderRadius.circular(20),
+        color: color.withValues(alpha: context.isDark ? 0.22 : 0.11),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -197,7 +214,7 @@ class Pill extends StatelessWidget {
           ],
           Text(label,
               style: TextStyle(
-                  color: color, fontSize: 11.5, fontWeight: FontWeight.w800)),
+                  color: color, fontSize: 11.5, fontWeight: FontWeight.w600)),
         ],
       ),
     );
@@ -227,7 +244,7 @@ class Avatar extends StatelessWidget {
       child: Text(text,
           style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               fontSize: radius * 0.85)),
     );
   }
@@ -258,7 +275,7 @@ class EmptyState extends StatelessWidget {
             Text(title,
                 textAlign: TextAlign.center,
                 style: context.theme.textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w800)),
+                    ?.copyWith(fontWeight: FontWeight.w700)),
             if (subtitle != null) ...[
               const SizedBox(height: 6),
               Text(subtitle!,
@@ -333,11 +350,11 @@ class BioPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final stroke = Paint()
-      ..color = color.withValues(alpha: 0.10)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    final fill = Paint()
       ..color = color.withValues(alpha: 0.07)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6;
+    final fill = Paint()
+      ..color = color.withValues(alpha: 0.045)
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(Offset(size.width * 0.12, size.height * 0.2), 46, fill);
@@ -364,8 +381,8 @@ class BioPatternPainter extends CustomPainter {
     canvas.drawPath(a, stroke);
     canvas.drawPath(b, stroke);
     final rung = Paint()
-      ..color = color.withValues(alpha: 0.08)
-      ..strokeWidth = 2;
+      ..color = color.withValues(alpha: 0.05)
+      ..strokeWidth = 1.6;
     for (double t = 0.04; t < 1; t += 0.06) {
       final y = h * t;
       final dx = math.sin(t * math.pi * 4) * 20;
@@ -389,27 +406,119 @@ class HeroHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const radius = BorderRadius.vertical(bottom: Radius.circular(30));
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: colors ??
-              const [AppColors.primary, AppColors.primaryDark],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          colors: colors ?? const [Color(0xFF0D7561), AppColors.primaryDark],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
         ),
-        borderRadius:
-            const BorderRadius.vertical(bottom: Radius.circular(32)),
+        borderRadius: radius,
+        boxShadow: [
+          BoxShadow(
+              color: AppColors.primaryDark.withValues(alpha: 0.25),
+              blurRadius: 24,
+              offset: const Offset(0, 10)),
+        ],
       ),
       child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(32)),
-        child: CustomPaint(
-          painter: BioPatternPainter(Colors.white),
-          child: SafeArea(
-            bottom: false,
-            child: Padding(padding: padding, child: child),
+        borderRadius: radius,
+        child: Stack(
+          children: [
+            // soft light from the top corner
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: const Alignment(-0.9, -1.2),
+                    radius: 1.1,
+                    colors: [
+                      Colors.white.withValues(alpha: 0.14),
+                      Colors.white.withValues(alpha: 0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: CustomPaint(painter: BioPatternPainter(Colors.white)),
+            ),
+            SafeArea(
+              bottom: false,
+              child: Padding(padding: padding, child: child),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Translucent stat tile used in hero headers.
+class HeroStat extends StatelessWidget {
+  final String value;
+  final String label;
+  final VoidCallback onTap;
+  const HeroStat(
+      {super.key, required this.value, required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Material(
+          color: Colors.white.withValues(alpha: 0.11),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: Colors.white.withValues(alpha: 0.18)),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 6),
+              child: Column(children: [
+                Text(value,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        fontFeatures: [FontFeature.tabularFigures()])),
+                const SizedBox(height: 2),
+                Text(label,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.82), fontSize: 11.5)),
+              ]),
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Fades and slides a child in once; use [index] to stagger lists.
+class Reveal extends StatelessWidget {
+  final Widget child;
+  final int index;
+  const Reveal({super.key, required this.child, this.index = 0});
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: Duration(milliseconds: 380 + index * 55),
+      curve: Curves.easeOutCubic,
+      builder: (_, v, c) => Opacity(
+        opacity: v,
+        child: Transform.translate(offset: Offset(0, (1 - v) * 14), child: c),
+      ),
+      child: child,
     );
   }
 }
@@ -440,7 +549,10 @@ class StatCard extends StatelessWidget {
           IconBadge(icon, color, size: 38),
           const SizedBox(height: 12),
           Text(value,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+              style: const TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.w700,
+                  fontFeatures: [FontFeature.tabularFigures()])),
           Text(label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -479,7 +591,8 @@ class ChipSelector<T> extends StatelessWidget {
                 showCheckmark: false,
                 onSelected: (_) => onChanged(v),
                 labelStyle: TextStyle(
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13.5,
                   color: v == selected ? Colors.white : context.ink,
                 ),
                 selectedColor: context.cs.primary,
@@ -487,7 +600,7 @@ class ChipSelector<T> extends StatelessWidget {
                 side: BorderSide(
                     color: v == selected ? context.cs.primary : context.line),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(12)),
               ),
             ),
         ],

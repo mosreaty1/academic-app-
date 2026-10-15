@@ -48,7 +48,7 @@ class AnnouncementsScreen extends StatelessWidget {
                             Expanded(
                               child: Text(a.title.of(context),
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w800, fontSize: 15.5)),
+                                      fontWeight: FontWeight.w700, fontSize: 15.5)),
                             ),
                             Pill(gradeShort(context, a.grade), AppColors.primary),
                           ]),
@@ -93,7 +93,7 @@ class _PostFormState extends State<_PostForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إعلان جديد', 'New announcement'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
         LabeledField(context.tr('العنوان', 'Title'), _title),
         LabeledField(context.tr('النص', 'Message'), _body, maxLines: 4),
@@ -167,7 +167,7 @@ class NotificationsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(n.title.of(context),
-                            style: const TextStyle(fontWeight: FontWeight.w800)),
+                            style: const TextStyle(fontWeight: FontWeight.w700)),
                         const SizedBox(height: 2),
                         Text(n.body.of(context),
                             style: TextStyle(color: context.muted, fontSize: 13)),

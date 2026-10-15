@@ -56,7 +56,7 @@ class MoreScreen extends StatelessWidget {
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
-                            fontWeight: FontWeight.w800)),
+                            fontWeight: FontWeight.w700)),
                     const SizedBox(height: 2),
                     Text(subtitle,
                         style: TextStyle(color: Colors.white.withValues(alpha: 0.85))),
@@ -90,7 +90,7 @@ class MoreScreen extends StatelessWidget {
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 11,
-                                  fontWeight: FontWeight.w800)),
+                                  fontWeight: FontWeight.w700)),
                         ),
                       const Icon(Icons.chevron_right_rounded),
                     ]),

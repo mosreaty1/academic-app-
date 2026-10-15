@@ -80,7 +80,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
                               : context.tr('افتح كل الدروس', 'Unlock all lessons'),
                           style: const TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w700,
                               fontSize: 16)),
                       const SizedBox(height: 2),
                       Text(
@@ -137,7 +137,6 @@ class _LessonCard extends StatelessWidget {
     final locked = !teacher && !s.canWatch(studentId!, lesson);
     final progress = teacher ? 0.0 : s.progressOf(studentId!, lesson.id);
     final done = progress >= 0.9;
-    final color = locked ? AppColors.muted : AppColors.violet;
 
     return AppCard(
       padding: const EdgeInsets.all(12),
@@ -149,24 +148,62 @@ class _LessonCard extends StatelessWidget {
         }
       },
       child: Row(children: [
-        Container(
-          width: 88,
-          height: 62,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            gradient: LinearGradient(
-                colors: [color, color.withValues(alpha: 0.6)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: SizedBox(
+            width: 100,
+            height: 68,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: locked
+                            ? const [Color(0xFF4A5753), Color(0xFF2E3835)]
+                            : const [Color(0xFF0D7561), Color(0xFF063F34)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight),
+                  ),
+                  child: CustomPaint(painter: BioPatternPainter(Colors.white)),
+                ),
+                Center(
+                  child: Container(
+                    width: 34,
+                    height: 34,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.5))),
+                    child: Icon(
+                        locked
+                            ? Icons.lock_rounded
+                            : done
+                                ? Icons.check_rounded
+                                : Icons.play_arrow_rounded,
+                        color: Colors.white,
+                        size: 20),
+                  ),
+                ),
+                PositionedDirectional(
+                  end: 5,
+                  bottom: 5,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.55),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Text('${lesson.minutes}:00',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            fontFeatures: [FontFeature.tabularFigures()])),
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: Icon(
-              locked
-                  ? Icons.lock_rounded
-                  : done
-                      ? Icons.check_circle_rounded
-                      : Icons.play_circle_fill_rounded,
-              color: Colors.white,
-              size: 32),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -176,7 +213,7 @@ class _LessonCard extends StatelessWidget {
               Text(lesson.title.of(context),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w800, height: 1.3)),
+                  style: const TextStyle(fontWeight: FontWeight.w700, height: 1.3)),
               const SizedBox(height: 4),
               Wrap(
                 spacing: 8,
@@ -238,7 +275,7 @@ class _PaywallSheet extends StatelessWidget {
         const Icon(Icons.lock_rounded, size: 46, color: AppColors.amber),
         const SizedBox(height: 12),
         Text(context.tr('هذا الدرس للمشتركين', 'This lesson is for subscribers'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 6),
         Text(
             context.tr('اشترك الآن أو فعّل كود الاشتراك لمشاهدة كل الدروس.',
@@ -440,7 +477,7 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text('${_speed}x',
                           style: const TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w800)),
+                              color: Colors.white, fontWeight: FontWeight.w700)),
                     ),
                   ),
                 ]),
@@ -452,7 +489,7 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(_lesson.title.of(context),
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 8),
                 Wrap(spacing: 8, children: [
                   Pill(_lesson.chapter.of(context), AppColors.primary),
@@ -528,7 +565,7 @@ class _AddLessonFormState extends State<_AddLessonForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إضافة درس فيديو', 'Add a video lesson'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
         LabeledField(context.tr('عنوان الدرس', 'Lesson title'), _title),
         LabeledField(context.tr('الوصف', 'Description'), _desc, maxLines: 2),

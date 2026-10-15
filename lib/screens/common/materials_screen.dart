@@ -68,7 +68,7 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
                   stroke: 7,
                   child: Text('$studiedCount/${list.length}',
                       style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w800)),
+                          fontSize: 12, fontWeight: FontWeight.w700)),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -76,7 +76,7 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(context.tr('تقدمك في المذاكرة', 'Your study progress'),
-                          style: const TextStyle(fontWeight: FontWeight.w800)),
+                          style: const TextStyle(fontWeight: FontWeight.w700)),
                       Text(
                           context.tr('علّم المادة "تمت المذاكرة" بعد الانتهاء منها',
                               'Mark a material "studied" once you finish it'),
@@ -120,7 +120,7 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
                       children: [
                         Text(m.title.of(context),
                             style: const TextStyle(
-                                fontWeight: FontWeight.w800, fontSize: 15)),
+                                fontWeight: FontWeight.w700, fontSize: 15)),
                         const SizedBox(height: 3),
                         Text(
                             '${m.chapter.of(context)} • ${metaLabel(context, m.meta)}',
@@ -178,7 +178,7 @@ class _MaterialSheet extends StatelessWidget {
         ),
         const SizedBox(height: 14),
         Text(m.title.of(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
         const SizedBox(height: 8),
         Wrap(spacing: 8, runSpacing: 6, children: [
           Pill(materialKindLabel(context, m.kind), color),
@@ -262,7 +262,7 @@ class _AddMaterialFormState extends State<_AddMaterialForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('رفع مادة تعليمية', 'Upload study material'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
         LabeledField(context.tr('العنوان', 'Title'), _title),
         ChipSelector<int>(

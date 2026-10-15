@@ -59,7 +59,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   stroke: 11,
                   child: Text('${(pct * 100).round()}%',
                       style: const TextStyle(
-                          fontSize: 21, fontWeight: FontWeight.w800)),
+                          fontSize: 21, fontWeight: FontWeight.w700)),
                 ),
                 const SizedBox(width: 18),
                 Expanded(
@@ -68,7 +68,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     children: [
                       Text(context.tr('نسبة الحضور', 'Attendance rate'),
                           style: const TextStyle(
-                              fontWeight: FontWeight.w800, fontSize: 16)),
+                              fontWeight: FontWeight.w700, fontSize: 16)),
                       const SizedBox(height: 4),
                       Text(
                           pct >= 0.9
@@ -188,7 +188,7 @@ class _CountTile extends StatelessWidget {
         children: [
           Text('$value',
               style: TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.w800, color: color)),
+                  fontSize: 20, fontWeight: FontWeight.w700, color: color)),
           const SizedBox(height: 2),
           Text(label, style: TextStyle(color: context.muted, fontSize: 11.5)),
         ],
@@ -237,7 +237,7 @@ class _MonthCalendar extends StatelessWidget {
                   child: Text(
                       '${fmtDate(context, first).split(' ').last} ${month.year}',
                       style: const TextStyle(
-                          fontWeight: FontWeight.w800, fontSize: 16)),
+                          fontWeight: FontWeight.w700, fontSize: 16)),
                 ),
               ),
               IconButton(
@@ -310,7 +310,7 @@ class _MonthCalendar extends StatelessWidget {
       child: Center(
         child: Text('${d.day}',
             style: TextStyle(
-                fontWeight: st == null ? FontWeight.w500 : FontWeight.w800,
+                fontWeight: st == null ? FontWeight.w500 : FontWeight.w700,
                 color: color ?? (weekend ? context.muted.withValues(alpha: 0.5) : context.ink),
                 fontSize: 13)),
       ),

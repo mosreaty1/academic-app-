@@ -8,6 +8,11 @@ import '../../data/app_state.dart';
 import '../../models/models.dart';
 import 'announcements_screen.dart';
 
+String roomLabel(BuildContext c, String room) {
+  if (!c.isAr) return room;
+  return room.replaceFirst('Hall', 'قاعة').replaceFirst('Lab', 'معمل');
+}
+
 String greeting(BuildContext c) {
   final h = DateTime.now().hour;
   if (h < 12) return c.tr('صباح الخير', 'Good morning');
@@ -42,7 +47,7 @@ class NotificationBell extends StatelessWidget {
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 10,
-                      fontWeight: FontWeight.w800)),
+                      fontWeight: FontWeight.w700)),
             ),
           ),
       ],
@@ -71,23 +76,37 @@ class QuickActionGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
-      childAspectRatio: 0.82,
+      childAspectRatio: 0.78,
       children: [
-        for (final a in actions)
-          InkWell(
-            borderRadius: BorderRadius.circular(18),
-            onTap: a.onTap,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconBadge(a.icon, a.color, size: 54),
-                const SizedBox(height: 8),
-                Text(context.tr(a.ar, a.en),
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 11.5, fontWeight: FontWeight.w700, height: 1.2)),
-              ],
+        for (var i = 0; i < actions.length; i++)
+          Reveal(
+            index: i,
+            child: Material(
+              color: context.card,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(color: context.line),
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: actions[i].onTap,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconBadge(actions[i].icon, actions[i].color, size: 42),
+                      const SizedBox(height: 8),
+                      Text(context.tr(actions[i].ar, actions[i].en),
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 11.5, fontWeight: FontWeight.w600, height: 1.25)),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
       ],
@@ -118,7 +137,7 @@ class TodayClassesCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(context.tr('حصص اليوم', "Today's classes"),
-                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15.5)),
+                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15.5)),
                   Text(fmtDateFull(context, now),
                       style: TextStyle(color: context.muted, fontSize: 12)),
                 ],
@@ -144,7 +163,7 @@ class TodayClassesCard extends StatelessWidget {
                 Column(children: [
                   Text(fmtClock(context, sl.time),
                       style: TextStyle(
-                          fontWeight: FontWeight.w800, color: context.brand)),
+                          fontWeight: FontWeight.w700, color: context.brand)),
                   Text('${sl.minutes} ${context.tr('د', 'min')}',
                       style: TextStyle(color: context.muted, fontSize: 11)),
                 ]),
@@ -158,11 +177,11 @@ class TodayClassesCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(sl.topic.of(context),
-                          style: const TextStyle(fontWeight: FontWeight.w800)),
+                          style: const TextStyle(fontWeight: FontWeight.w700)),
                       Text(
                           grade == null
-                              ? '${gradeName(context, sl.grade)} • ${sl.room}'
-                              : '${context.tr('د. راشيا', 'Dr. Rashia')} • ${sl.room}',
+                              ? '${gradeName(context, sl.grade)} • ${roomLabel(context, sl.room)}'
+                              : '${context.tr('د. راشيا', 'Dr. Rashia')} • ${roomLabel(context, sl.room)}',
                           style: TextStyle(color: context.muted, fontSize: 12)),
                     ],
                   ),
@@ -202,7 +221,7 @@ class AnnouncementPreview extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(a.title.of(context),
-                      style: const TextStyle(fontWeight: FontWeight.w800)),
+                      style: const TextStyle(fontWeight: FontWeight.w700)),
                   const SizedBox(height: 2),
                   Text(a.body.of(context),
                       maxLines: 2,
@@ -282,7 +301,7 @@ class UpcomingList extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
               Text(sub, style: TextStyle(color: context.muted, fontSize: 12)),
             ],
           ),

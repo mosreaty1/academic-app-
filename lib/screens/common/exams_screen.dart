@@ -79,12 +79,12 @@ class ExamsScreen extends StatelessWidget {
         children: [
           AppCard(
             gradient: const LinearGradient(
-                colors: [AppColors.violet, Color(0xFF5A3FA0)]),
+                colors: [Color(0xFF1B3A32), Color(0xFF0E241F)]),
             border: false,
             child: Row(
               children: [
                 const Icon(Icons.emoji_events_rounded,
-                    color: Colors.white, size: 38),
+                    color: AppColors.gold, size: 38),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(
@@ -98,7 +98,7 @@ class ExamsScreen extends StatelessWidget {
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 28,
-                              fontWeight: FontWeight.w800)),
+                              fontWeight: FontWeight.w700)),
                     ],
                   ),
                 ),
@@ -109,7 +109,7 @@ class ExamsScreen extends StatelessWidget {
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 22,
-                            fontWeight: FontWeight.w800)),
+                            fontWeight: FontWeight.w700)),
                     Text(context.tr('تم إنجازها', 'completed'),
                         style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.85),
@@ -172,7 +172,7 @@ class _ExamCard extends StatelessWidget {
               children: [
                 Text('${a.score}/${a.total}',
                     style: TextStyle(
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         fontSize: 17,
                         color: scoreColor(a.percent))),
                 Text(gradeLetter(context, a.percent),
@@ -223,7 +223,7 @@ class _ExamCard extends StatelessWidget {
                 children: [
                   Text(exam.title.of(context),
                       style: const TextStyle(
-                          fontWeight: FontWeight.w800, fontSize: 15)),
+                          fontWeight: FontWeight.w700, fontSize: 15)),
                   const SizedBox(height: 4),
                   Text(
                       '${examKindLabel(context, exam.kind)} • ${fmtDate(context, exam.date)} • ${exam.durationMin} ${context.tr('د', 'min')} • $total ${context.tr('درجة', 'marks')}',
@@ -249,7 +249,7 @@ class _ExamCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(exam.title.of(ctx),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
           const SizedBox(height: 14),
           _Rule(Icons.timer_outlined,
               ctx.tr('المدة ${exam.durationMin} دقيقة', 'Duration ${exam.durationMin} minutes')),
@@ -423,7 +423,7 @@ class _ExamTakeScreenState extends State<ExamTakeScreen> {
                 const SizedBox(width: 4),
                 Text(_clock,
                     style: TextStyle(
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         color: low ? AppColors.coral : context.brand,
                         fontFeatures: const [FontFeature.tabularFigures()])),
               ]),
@@ -463,7 +463,7 @@ class _ExamTakeScreenState extends State<ExamTakeScreen> {
                   const SizedBox(height: 18),
                   Text(q.text.of(context),
                       style: const TextStyle(
-                          fontSize: 19, fontWeight: FontWeight.w800, height: 1.5)),
+                          fontSize: 19, fontWeight: FontWeight.w700, height: 1.5)),
                   const SizedBox(height: 20),
                   if (q.type == QType.mcq)
                     for (var i = 0; i < q.options.length; i++)
@@ -534,7 +534,7 @@ class _ExamTakeScreenState extends State<ExamTakeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(ctx.tr('خريطة الأسئلة', 'Question map'),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
           const SizedBox(height: 14),
           Wrap(
             spacing: 10,
@@ -561,7 +561,7 @@ class _ExamTakeScreenState extends State<ExamTakeScreen> {
                     ),
                     child: Text('${i + 1}',
                         style: TextStyle(
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w700,
                             color: _isAnswered(_qs[i]) ? Colors.white : ctx.ink)),
                   ),
                 ),
@@ -614,7 +614,7 @@ class _OptionTile extends StatelessWidget {
                 ),
                 child: Text(letter,
                     style: TextStyle(
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         color: selected ? Colors.white : context.muted)),
               ),
               const SizedBox(width: 12),
@@ -665,7 +665,7 @@ class ExamResultScreen extends StatelessWidget {
                     children: [
                       Text(a.graded ? '${a.score}' : '${a.mcqScore}+',
                           style: const TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w800)),
+                              fontSize: 30, fontWeight: FontWeight.w700)),
                       Text('/ ${a.total}',
                           style: TextStyle(color: context.muted)),
                     ],
@@ -677,7 +677,7 @@ class ExamResultScreen extends StatelessWidget {
                         ? gradeLetter(context, a.percent)
                         : context.tr('بانتظار تصحيح الأسئلة المقالية', 'Written answers awaiting grading'),
                     style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w800, color: color)),
+                        fontSize: 18, fontWeight: FontWeight.w700, color: color)),
                 const SizedBox(height: 4),
                 Text(
                     a.graded
@@ -728,7 +728,7 @@ class _ReviewCard extends StatelessWidget {
               Expanded(
                 child: Text(q.text.of(context),
                     style: const TextStyle(
-                        fontWeight: FontWeight.w800, height: 1.4)),
+                        fontWeight: FontWeight.w700, height: 1.4)),
               ),
             ]),
             const SizedBox(height: 12),

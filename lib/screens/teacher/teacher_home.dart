@@ -60,7 +60,7 @@ class TeacherHome extends StatelessWidget {
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 21,
-                                fontWeight: FontWeight.w800)),
+                                fontWeight: FontWeight.w700)),
                       ],
                     ),
                   ),
@@ -183,26 +183,6 @@ class _HeroStat extends StatelessWidget {
   const _HeroStat(this.value, this.label, this.onTap);
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(18)),
-          child: Column(children: [
-            Text(value,
-                style: const TextStyle(
-                    color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 2),
-            Text(label,
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 11.5)),
-          ]),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      HeroStat(value: value, label: label, onTap: onTap);
 }

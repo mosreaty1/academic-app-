@@ -97,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 30,
-                        fontWeight: FontWeight.w800)),
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 6),
                 Text(
                     context.tr('سجّل الدخول إلى أكاديمية د. راشيا للأحياء',

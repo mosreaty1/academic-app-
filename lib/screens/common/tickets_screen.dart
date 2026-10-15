@@ -99,7 +99,7 @@ class _TicketsScreenState extends State<TicketsScreen> {
                       children: [
                         Text(t.subject,
                             style: const TextStyle(
-                                fontWeight: FontWeight.w800, fontSize: 15)),
+                                fontWeight: FontWeight.w700, fontSize: 15)),
                         const SizedBox(height: 3),
                         Text(
                             teacher
@@ -158,7 +158,7 @@ class _NewTicketFormState extends State<_NewTicketForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('تذكرة جديدة', 'New support ticket'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
         ChipSelector<String>(
           values: _cats,
@@ -242,7 +242,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(t.subject,
-                          style: const TextStyle(fontWeight: FontWeight.w800)),
+                          style: const TextStyle(fontWeight: FontWeight.w700)),
                       Text(_catLabel(context, t.category),
                           style: TextStyle(color: context.muted, fontSize: 12)),
                     ],
@@ -325,7 +325,7 @@ class _Bubble extends StatelessWidget {
                 child: Text(context.tr('د. راشيا', 'Dr. Rashia'),
                     style: TextStyle(
                         color: context.brand,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         fontSize: 11.5)),
               ),
             Text(msg.text,

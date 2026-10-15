@@ -208,7 +208,7 @@ class _QuestionCardState extends State<QuestionCard> {
           const SizedBox(height: 8),
           Text(q.text.of(context),
               style: const TextStyle(
-                  fontWeight: FontWeight.w800, fontSize: 15.5, height: 1.5)),
+                  fontWeight: FontWeight.w700, fontSize: 15.5, height: 1.5)),
           const SizedBox(height: 12),
           if (q.type == QType.mcq)
             for (var i = 0; i < q.options.length; i++) _option(context, s, i)
@@ -224,7 +224,7 @@ class _QuestionCardState extends State<QuestionCard> {
                   Text(context.tr('الإجابة النموذجية', 'Model answer'),
                       style: TextStyle(
                           color: context.brand,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                           fontSize: 12)),
                   const SizedBox(height: 4),
                   Text(q.modelAnswer.of(context), style: const TextStyle(height: 1.5)),
@@ -308,7 +308,7 @@ class _QuestionCardState extends State<QuestionCard> {
           child: Row(children: [
             Text(String.fromCharCode(65 + i),
                 style: TextStyle(
-                    fontWeight: FontWeight.w800, color: context.muted)),
+                    fontWeight: FontWeight.w700, color: context.muted)),
             const SizedBox(width: 12),
             Expanded(
                 child: Text(q.options[i].of(context),
@@ -363,7 +363,7 @@ class _AddQuestionFormState extends State<AddQuestionForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إضافة سؤال لبنك الأسئلة', 'Add a bank question'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
         ChipSelector<int>(
           values: const [1, 2, 3],

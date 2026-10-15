@@ -76,7 +76,7 @@ class _StoreScreenState extends State<StoreScreen> {
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 10,
-                              fontWeight: FontWeight.w800)),
+                              fontWeight: FontWeight.w700)),
                     ),
                   ),
               ],
@@ -178,7 +178,7 @@ class _BookCard extends StatelessWidget {
                             style: TextStyle(
                                 color: book.color,
                                 fontSize: 10.5,
-                                fontWeight: FontWeight.w800)),
+                                fontWeight: FontWeight.w700)),
                       ),
                     ),
                 ],
@@ -194,7 +194,7 @@ class _BookCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                        fontWeight: FontWeight.w800, fontSize: 13.5, height: 1.3)),
+                        fontWeight: FontWeight.w700, fontSize: 13.5, height: 1.3)),
                 const SizedBox(height: 4),
                 Row(children: [
                   const Icon(Icons.star_rounded, color: AppColors.amber, size: 15),
@@ -214,7 +214,7 @@ class _BookCard extends StatelessWidget {
                   Expanded(
                     child: Text(money(context, book.price),
                         style: TextStyle(
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w700,
                             color: context.brand,
                             fontSize: 15)),
                   ),
@@ -273,13 +273,13 @@ class _BookSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(book.title.of(context),
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 Text(book.subtitle.of(context), style: TextStyle(color: context.muted)),
                 const SizedBox(height: 8),
                 Text(money(context, book.price),
                     style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w800, color: context.brand)),
+                        fontSize: 20, fontWeight: FontWeight.w700, color: context.brand)),
               ],
             ),
           ),
@@ -339,7 +339,7 @@ class _AddBookFormState extends State<_AddBookForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.tr('إضافة منتج للمتجر', 'Add store product'),
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
         LabeledField(context.tr('الاسم', 'Name'), _title),
         LabeledField(context.tr('وصف مختصر', 'Short description'), _sub),
@@ -448,10 +448,10 @@ class _CartScreenState extends State<CartScreen> {
                             children: [
                               Text(l.$1.title.of(context),
                                   maxLines: 2,
-                                  style: const TextStyle(fontWeight: FontWeight.w800)),
+                                  style: const TextStyle(fontWeight: FontWeight.w700)),
                               Text(money(context, l.$1.price * l.$2),
                                   style: TextStyle(
-                                      color: context.brand, fontWeight: FontWeight.w800)),
+                                      color: context.brand, fontWeight: FontWeight.w700)),
                             ],
                           ),
                         ),
@@ -531,7 +531,7 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget _sumRow(BuildContext context, String a, String b, {bool bold = false}) {
     final st = TextStyle(
-        fontWeight: bold ? FontWeight.w800 : FontWeight.w600,
+        fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
         fontSize: bold ? 17 : 14);
     return Row(children: [
       Expanded(child: Text(a, style: st)),
@@ -556,7 +556,7 @@ class _Stepper extends StatelessWidget {
             visualDensity: VisualDensity.compact,
             onPressed: onMinus,
             icon: const Icon(Icons.remove_rounded, size: 18)),
-        Text('$qty', style: const TextStyle(fontWeight: FontWeight.w800)),
+        Text('$qty', style: const TextStyle(fontWeight: FontWeight.w700)),
         IconButton(
             visualDensity: VisualDensity.compact,
             onPressed: onPlus,
@@ -588,7 +588,7 @@ class _OrderDone extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(context.tr('تم استلام طلبك!', 'Order placed!'),
-                  style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
+                  style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w700)),
               const SizedBox(height: 8),
               Text(
                   context.tr('رقم الطلب ${order.id} • الإجمالي ${money(context, order.total)}',
@@ -648,7 +648,7 @@ class OrdersScreen extends StatelessWidget {
                           Row(children: [
                             Text(o.id,
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w800, fontSize: 15)),
+                                    fontWeight: FontWeight.w700, fontSize: 15)),
                             const Spacer(),
                             Pill(orderStatusLabel(context, o.status),
                                 orderStatusColor(o.status)),
@@ -681,7 +681,7 @@ class OrdersScreen extends StatelessWidget {
                             const Spacer(),
                             Text(money(context, o.total),
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w700,
                                     color: context.brand,
                                     fontSize: 16)),
                           ]),

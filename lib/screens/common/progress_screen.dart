@@ -165,7 +165,7 @@ class _Bar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text('${(value * 100).round()}%',
-              style: TextStyle(fontWeight: FontWeight.w800, color: color, fontSize: 12)),
+              style: TextStyle(fontWeight: FontWeight.w700, color: color, fontSize: 12)),
           const SizedBox(height: 4),
           AnimatedContainer(
             duration: const Duration(milliseconds: 500),
@@ -206,7 +206,7 @@ class _MasteryRow extends StatelessWidget {
               child: Text(label,
                   style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5))),
           Text('${(value * 100).round()}%',
-              style: TextStyle(fontWeight: FontWeight.w800, color: color)),
+              style: TextStyle(fontWeight: FontWeight.w700, color: color)),
         ]),
         const SizedBox(height: 6),
         ClipRRect(
